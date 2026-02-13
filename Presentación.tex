@@ -1,0 +1,168 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{cite}
+
+\title[Minería de Datos - Cancer Data]{Aplicación de la Metodología CRISP-DM para el Análisis de Datos de Cáncer}
+\author{Guevara - Hernández}
+\institute{UCV}
+\date{2025}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}{Introducción}
+		La minería de datos se define como el proceso de descubrir conocimiento o patrones implícitos, desconocidos y potencialmente útiles a partir de los datos [1], [2]. En este proyecto, aplicamos este proceso a un conjunto de datos médicos para facilitar la toma de decisiones clínicas [3].
+	\end{frame}
+	
+	% --- JUSTIFICACIÓN PARTE 1 ---
+	\begin{frame}{Justificación de CRISP-DM (I)}
+		La elección de CRISP-DM como marco de trabajo se fundamenta en su posición como estándar de facto en la industria [3, 4].
+		\begin{itemize}
+			\item<1-> \textbf{Orientación al Negocio:} A diferencia de modelos puramente técnicos como SEMMA, CRISP-DM inicia con el entendimiento de los objetivos comerciales y criterios de éxito [3, 5].
+			\item<2-> \textbf{Reducción de Riesgos:} Sistematiza el desarrollo, lo que permite minimizar las probabilidades de reprocesos costosos durante el ciclo de vida del proyecto [6].
+		\end{itemize}
+	\end{frame}
+	
+	% --- JUSTIFICACIÓN PARTE 2 ---
+	\begin{frame}{Justificación de CRISP-DM (II)}
+		\begin{itemize}
+			\item<1-> \textbf{Ciclo Iterativo y Flexible:} Su naturaleza no es lineal; permite retroceder entre fases (ej. del Modelado a la Preparación de Datos) según los hallazgos técnicos [7, 8].
+			\item<2-> \textbf{Visión de Despliegue:} Incluye explícitamente el mantenimiento y monitoreo, fases críticas para gestionar la "deuda técnica" en sistemas de aprendizaje automático [9, 10].
+			\item<3-> \textbf{Interdisciplinariedad:} Facilita la colaboración entre expertos del dominio y analistas de datos [11, 12].
+		\end{itemize}
+	\end{frame}
+	
+	% --- FASES PARTE 1: ENTENDIMIENTO ---
+	\begin{frame}{Etapas de CRISP-DM (I): Entendimiento}
+		Las fases iniciales sientan las bases del conocimiento necesario para el éxito del proyecto [13].
+		\begin{enumerate}
+			\item<1-> \textbf{Entendimiento del Negocio:}
+			\begin{itemize}
+				\item Definición de objetivos cuantificables.
+				\item Evaluación de recursos, riesgos y relación costo-beneficio [14].
+			\end{itemize}
+			\item<2-> \textbf{Entendimiento de los Datos:}
+			\begin{itemize}
+				\item Recolección inicial y descripción de atributos.
+				\item Análisis de calidad (identificación de valores nulos, anómalos o sesgos) [13, 15].
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	% --- FASES PARTE 2: PREPARACIÓN Y MODELADO ---
+	\begin{frame}{Etapas de CRISP-DM (II): Acción Técnica}
+		En esta etapa se concentra el mayor esfuerzo computacional y analítico [16, 17].
+		\begin{enumerate}
+			\setcounter{enumi}{2}
+			\item \textbf{Preparación de los Datos:}
+			\begin{itemize}
+				\item Preprocesamiento estructural (\textit{Tidy Data}) y funcional (escalamiento, codificación) [18, 19].
+				\item Representa aproximadamente el 80\% del tiempo del proyecto [16, 20].
+			\end{itemize}
+			\item<2-> \textbf{Modelado:}
+			\begin{itemize}
+				\item Selección de algoritmos (clasificación, regresión, agrupación).
+				\item Configuración de hiperparámetros y diseño de pruebas de robustez [21, 22].
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	% --- FASES PARTE 3: EVALUACIÓN Y DESPLIEGUE ---
+	\begin{frame}{Etapas de CRISP-DM (III): Cierre y Valor}
+		Se verifica que el conocimiento extraído sea realmente útil y aplicable [5, 23].
+		\begin{enumerate}
+			\setcounter{enumi}{4}
+			\item \textbf{Evaluación del Modelo:}
+			\begin{itemize}
+				\item Comparación de resultados frente a los objetivos de negocio.
+				\item Análisis de métricas técnicas (Precisión, F1-Score) y lógicas [5, 24].
+			\end{itemize}
+			\item<2-> \textbf{Despliegue:}
+			\begin{itemize}
+				\item Plan de implementación (APIs, integración en sistemas).
+				\item Reporte final, documentación técnica y plan de mantenimiento [5, 24].
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	\section{1. Entendimiento del Negocio}
+	\begin{frame}{Fase 1: Entendimiento del Negocio}
+		Siguiendo el estándar CRISP-DM, la primera fase consiste en establecer objetivos cuantificables y criterios de éxito [4], [5].
+		\begin{itemize}
+			\item \textbf{Objetivo:} Desarrollar un modelo de clasificación para predecir si una observación celular es benigna o maligna [6], [7].
+			\item<2-> \textbf{Criterio de Éxito:} Alcanzar una precisión (Accuracy) y un F1-Score que superen los modelos base de la literatura para este tipo de diagnósticos [8], [9].
+		\end{itemize}
+	\end{frame}
+	
+	\section{2. Entendimiento de los Datos}
+	\begin{frame}{Fase 2: Entendimiento de los Datos}
+		Esta fase incluye la recolección, descripción y verificación de la calidad de los datos [10], [11].
+		\begin{itemize}
+			\item \textbf{Exploración Inicial:} Identificar atributos como el radio, textura y perímetro de las células [12].
+			\item<2-> \textbf{Calidad:} Verificar la presencia de valores nulos o inconsistencias en los formatos de las mediciones numéricas [10], [13].
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis Exploratorio de Datos (EDA)}
+		El EDA es fundamental para comprender las dinámicas del dataset [14].
+		\begin{itemize}
+			\item \textbf{Distribuciones:} Uso de histogramas o diagramas de densidad para observar la dispersión de las variables cuantitativas [14], [15].
+			\item<2-> \textbf{Correlaciones:} Implementación de mapas de calor (Heatmaps) para detectar colinealidad entre atributos numéricos (ej. relación entre radio y perímetro) [16], [17].
+			\item<3-> \textbf{Discriminación:} Comparar las características medias entre el subgrupo de tumores benignos frente a malignos [18], [19].
+		\end{itemize}
+	\end{frame}
+	
+	\section{3. Preparación de los Datos}
+	\begin{frame}{Fase 3: Preparación de Datos (Preprocesamiento)}
+		Es la etapa que más tiempo consume, asegurando que los datos sean estructural y funcionalmente correctos [20], [21].
+		\begin{itemize}
+			\item \textbf{Preprocesamiento Estructural:} Garantizar el formato \textit{Tidy Data} (una variable por columna, una observación por fila) [22], [23].
+			\item<2-> \textbf{Preprocesamiento Funcional:}
+			\begin{itemize}
+				\item \textbf{Escalamiento:} Aplicar \textit{StandardScaler} o \textit{MinMaxScaler} para que las variables tengan rangos comparables [24], [25].
+				\item \textbf{Codificación:} Transformar la variable objetivo (Diagnosis) de categórica a numérica (0/1) para el modelado [24], [26].
+				\item \textbf{Reducción de Dimensionalidad:} Evaluar el uso de PCA para reducir el ruido si existen atributos altamente correlacionados [27], [28].
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\section{4. Modelado}
+	\begin{frame}{Fase 4: Modelado}
+		Selección y aplicación de algoritmos especializados [6], [8].
+		\begin{itemize}
+			\item \textbf{Tarea:} Clasificación (Aprendizaje Supervisado) [7], [29].
+			\item<2-> \textbf{Algoritmos Candidatos:}
+			\begin{itemize}
+				\item \textbf{k-NN:} Efectivo si los atributos están igualmente escalados [30], [31].
+				\item \textbf{Regresión Logística:} Proporciona una separación lineal robusta para variables binarias [30], [32].
+				\item \textbf{Árboles de Decisión (CART):} Ofrece alta interpretabilidad para el personal médico [30], [33].
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\section{5. Evaluación y Despliegue}
+	\begin{frame}{Fase 5 y 6: Evaluación y Despliegue}
+		\begin{itemize}
+			\item \textbf{Evaluación:} Uso de \textit{Cross-Validation} para garantizar la fiabilidad de las métricas obtenidas [34], [35]. Análisis de la matriz de confusión para minimizar falsos negativos (casos de cáncer no detectados) [9].
+			\item<2-> \textbf{Despliegue:} Planificar la integración del modelo mediante una API o reporte final para su uso en entornos productivos [36], [37].
+			\item<3-> \textbf{Deuda Técnica:} Considerar factores de riesgo como la dependencia de datos inestables y la necesidad de monitoreo constante de la precisión [38], [39].
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Bibliografía}
+		\begin{thebibliography}{10}
+			\bibitem{Han2012} J. Han, M. Kamber y J. Pei, \textit{Data mining concepts and techniques}, 3ra ed., 2012.
+			\bibitem{Wirth2000} R. Wirth y J. Hipp, ``CRISP-DM: Towards a Standard Process Model for Data Mining'', 2000.
+			\bibitem{Sculley2015} D. Sculley et al., ``Hidden Technical Debt in Machine Learning Systems'', 2015.
+			\bibitem{King1995} R. D. King et al., ``STATLOG: Comparison of Classification Algorithms on Large Real-World Problems'', 1995.
+			\bibitem{Gonzalez2025} W. González, ``Proceso de Minería de Datos'', \textit{6213 - Facultad de Ciencias UCV}, 2025 [1, 16].
+			\bibitem{Martins2016} S. Martins et al., ``Propuesta de Artefactos para el Subproceso de Gestión de Proyectos de Explotación de Información'', \textit{SEDICI - UNLP}, 2016 [17].
+		\end{thebibliography}
+	\end{frame}
+	
+\end{document}
