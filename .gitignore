@@ -1,0 +1,54 @@
+# Archivos generados por LaTeX
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+*.synctex
+*.fdb_latexmk
+*.fls
+*.xdv
+
+# Archivos de Beamer
+*.vrb
+
+# Archivos temporales
+*.tmp
+*.bak
+*.backup
+
+# Archivos de compilación
+*.dvi
+*.ps
+
+
+# Carpetas de salida
+_build/
+out/
+build/
+dist/
+
+# Archivos de TeXstudio
+*.texstudio*
+*.tsd
+
+# Archivos de MiKTeX
+miktex*
+*.miktex
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de GitHub Desktop
+*.orig
