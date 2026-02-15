@@ -52,3 +52,6 @@ Thumbs.db
 
 # Archivos de GitHub Desktop
 *.orig
+
+# Otros
+*.ipynb

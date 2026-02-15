@@ -90,24 +90,89 @@
 		\end{enumerate}
 	\end{frame}
 	
-	\section{1. Entendimiento del Negocio}
-	\begin{frame}{Fase 1: Entendimiento del Negocio}
-		Siguiendo el estándar CRISP-DM, la primera fase consiste en establecer objetivos cuantificables y criterios de éxito [4], [5].
+	% --- LÁMINA 1: DESCRIPCIÓN Y ATRIBUTOS ---
+	\begin{frame}{ Estructura y Características del Dataset}
+		Este conjunto de datos (\href{https://www.kaggle.com/datasets/erdemtaha/cancer-data}{Aquí el link})  se compone de características visuales extraídas de muestras celulares para el diagnóstico clínico de cáncer de mama,.
 		\begin{itemize}
-			\item \textbf{Objetivo:} Desarrollar un modelo de clasificación para predecir si una observación celular es benigna o maligna [6], [7].
-			\item<2-> \textbf{Criterio de Éxito:} Alcanzar una precisión (Accuracy) y un F1-Score que superen los modelos base de la literatura para este tipo de diagnósticos [8], [9].
+			\item \textbf{Identificador (id):} Código único para cada paciente (no predictivo),.
+			\item \textbf{Variable Objetivo (diagnosis):} Clasificación binaria categórica con estados:
+			\begin{itemize}
+				\item \textbf{M} (Maligno - Cáncer presente).
+				\item \textbf{B} (Benigno - Ausencia de malignidad).
+			\end{itemize}
+			\item \textbf{Características Visuales (Valores Medios):} Atributos como radio\_media, textura\_media, perímetro\_media, área\_media, suavidad\_media, compacidad\_media, concavidad\_media y puntos cóncavos\_media,.
+			\item \textbf{Atributos Categóricos:} Incluye variables etiquetadas con valores numéricos para análisis estadístico,.
 		\end{itemize}
 	\end{frame}
 	
-	\section{2. Entendimiento de los Datos}
-	\begin{frame}{Fase 2: Entendimiento de los Datos}
-		Esta fase incluye la recolección, descripción y verificación de la calidad de los datos [10], [11].
+	% --- LÁMINA 2: UTILIDAD Y PREPROCESAMIENTO ---
+	\begin{frame}{Utilidad del Dataset y Análisis Exploratorio (EDA)}
+		El propósito fundamental es el entrenamiento y validación de algoritmos de diagnóstico médico asistido por computadora,.
 		\begin{itemize}
-			\item \textbf{Exploración Inicial:} Identificar atributos como el radio, textura y perímetro de las células [12].
-			\item<2-> \textbf{Calidad:} Verificar la presencia de valores nulos o inconsistencias en los formatos de las mediciones numéricas [10], [13].
+			\item \textbf{Distribución de Rangos:} Cada característica se asigna a tablas de frecuencia que contienen la cantidad de valores en rangos específicos,.
+			\item \textbf{Análisis Visual:} El uso de histogramas permite examinar la dispersión de las medias visuales del cáncer para detectar grupos naturales,.
+			\item \textbf{Preprocesamiento Sugerido:} Debido a que las características numéricas tienen rangos dispares (ej. área vs suavidad), es necesario aplicar \textit{escalamiento funcional} (Standardization) para garantizar la convergencia de los modelos,.
 		\end{itemize}
 	\end{frame}
 	
+	% --- LÁMINA 3: CASOS DE USO (MODELADO) ---
+	\begin{frame}{Fase 4: Casos de Uso de Algoritmos Predictivos}
+		Basado en la naturaleza binaria y visual del dataset, se proponen los siguientes enfoques de modelado bajo supervisión,:
+		\begin{itemize}
+			\item \textbf{Regresión Logística:} Ideal para clasificación binaria (M vs B). Permite predecir el tipo de cáncer basándose en la relación lineal de las características visuales,.
+			\item \textbf{K-Vecinos más cercanos (k-NN):} Clasifica muestras analizando la similitud entre pacientes cercanos. Se asume que características visuales similares tienden a diagnósticos iguales,.
+			\item \textbf{Máquinas de Vectores de Soporte (SVM):} Algoritmo potente para la separación clara de clases en espacios de alta dimensionalidad, optimizando el margen de decisión médico,.
+		\end{itemize}
+	\end{frame}
+		
+	
+	\begin{frame}{Fase 1: Entendimiento del Negocio y los Datos}
+		Según el estándar CRISP-DM, antes de cualquier procesamiento técnico, se deben ejecutar las siguientes acciones estratégicas sobre el dataset de \textit{Cancer Data} [1], [3]:
+		
+		\begin{itemize}
+			\item \textbf{Establecimiento de Objetivos:} Definir el problema como una tarea de \textit{clasificación binaria} para predecir la malignidad de un tumor basándose en atributos celulares [4], [1].
+			\item \textbf{Criterios de Éxito:} Determinar métricas de rendimiento críticas. En este contexto médico, es vital minimizar los \textit{falsos negativos} mediante el análisis de la Matriz de Confusión y el F1-Score [5], [6].
+			\item \textbf{Reporte de Calidad de Datos:} Realizar una auditoría inicial para detectar:
+			\begin{itemize}
+				\item Presencia de valores nulos o ausentes que requieran imputación [7], [8].
+				\item Consistencia en el formato de las variables numéricas (radio, textura, perímetro) [9], [10].
+				\item Identificación de \textit{outliers} que puedan sesgar el modelo predictivo [11], [12].
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	% --- LÁMINA 1: AUDITORÍA DE CALIDAD EXTENDIDA ---
+	\begin{frame}{Auditoría de Calidad Extendida (Fase 2)}
+		Además de los nulos y outliers, se deben verificar los siguientes criterios estáticos para asegurar la integridad del análisis,:
+		\begin{itemize}
+			\item \textbf{Valores Duplicados:} Detectar y consolidar registros idénticos que puedan causar confusión y sesgar el rendimiento del modelo,.
+			\item \textbf{Verificación de Tipos:} Garantizar que cada atributo (booleano, numérico, categórico) sea consistente con el significado documentado,.
+			\item \textbf{Distribución Estadística:} Evaluar el sesgo (\textit{skew}) y la curtosis de las variables numéricas; distribuciones extremas (sesgo $>1$, curtosis $>7$) sugieren el uso de algoritmos simbólicos en lugar de estadísticos,.
+			\item \textbf{Vigencia de los Datos:} Confirmar que las observaciones coinciden con la ventana de tiempo que se desea analizar para evitar el uso de información caduca,.
+		\end{itemize}
+	\end{frame}
+	
+	% --- LÁMINA 2: ANÁLISIS DE REDUNDANCIA ---
+	\begin{frame}{Análisis de Interdependencia y Redundancia}
+		Antes del modelado, es crítico evaluar la relación entre variables numéricas (como radio y perímetro),:
+		\begin{itemize}
+			\item \textbf{Colinealidad:} La alta correlación entre variables dificulta la atribución del comportamiento a un atributo específico y hace inestables a algunas técnicas de modelado,.
+			\item \textbf{Variables No Informativas:} Identificar y eliminar variables con varianza cero o redundantes que consumen recursos computacionales innecesarios sin aportar valor predictivo,.
+			\item \textbf{Uso de PCA:} En casos de alta dimensionalidad, considerar la reducción por proyección mediante Análisis de Componentes Principales para capturar la mayor varianza posible en un espacio más pequeño,.
+		\end{itemize}
+	\end{frame}
+	
+	% --- LÁMINA 3: PREPROCESAMIENTO ESTRUCTURAL ---
+	\begin{frame}{Preprocesamiento Estructural (Tidy Data)}
+		Para que el dataset sea procesable por librerías como \textit{scikit-learn}, debe cumplir con los principios de \textit{Tidy Data},:
+		\begin{itemize}
+			\item \textbf{Encapsulamiento:} Garantizar que cada fenómeno (ej. medición celular) esté en una única tabla y cada observación en una sola fila,.
+			\item \textbf{Normalización Estructural:} Cada variable debe estar documentada en una columna única, evitando que los descriptores de columna sean en realidad valores de una variable,.
+			\item \textbf{Consistencia de Significado:} La representación física de los datos debe ser consistente con la semántica del dominio médico (ej. unidades de medida uniformes),.
+		\end{itemize}
+	\end{frame}
+	
+
 	\begin{frame}{Análisis Exploratorio de Datos (EDA)}
 		El EDA es fundamental para comprender las dinámicas del dataset [14].
 		\begin{itemize}
@@ -162,6 +227,8 @@
 			\bibitem{King1995} R. D. King et al., ``STATLOG: Comparison of Classification Algorithms on Large Real-World Problems'', 1995.
 			\bibitem{Gonzalez2025} W. González, ``Proceso de Minería de Datos'', \textit{6213 - Facultad de Ciencias UCV}, 2025 [1, 16].
 			\bibitem{Martins2016} S. Martins et al., ``Propuesta de Artefactos para el Subproceso de Gestión de Proyectos de Explotación de Información'', \textit{SEDICI - UNLP}, 2016 [17].
+			\bibitem{Wickham2014} H. Wickham, ``Tidy Data'', \textit{Journal of Statistical Software}, 2014.
+			\bibitem{Sculley2015} D. Sculley et al., ``Hidden Technical Debt in Machine Learning Systems'', 2015.
 		\end{thebibliography}
 	\end{frame}
 	
