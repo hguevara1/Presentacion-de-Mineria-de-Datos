@@ -26,6 +26,8 @@
 *.tmp
 *.bak
 *.backup
+~$*.docx
+*.tmp
 
 # Archivos de compilación
 *.dvi
