@@ -1,0 +1,1767 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{caption}
+
+
+% Colores estilo Google Colab Dark
+\definecolor{colab-bg}{HTML}{1E1E1E}
+\definecolor{colab-text}{HTML}{D4D4D4}
+\definecolor{colab-keyword}{HTML}{569CD6}
+\definecolor{colab-string}{HTML}{CE9178}
+\definecolor{colab-comment}{HTML}{6A9955}
+\definecolor{colab-number}{HTML}{B5CEA8}
+\definecolor{colab-func}{HTML}{DCDCAA}
+\definecolor{colab-frame}{HTML}{3C3C3C}
+
+
+
+% Permitir tildes en listings
+\lstset{
+	inputencoding=utf8,
+	extendedchars=true,
+	literate=
+	{á}{{\'a}}1
+	{é}{{\'e}}1
+	{í}{{\'i}}1
+	{ó}{{\'o}}1
+	{ú}{{\'u}}1
+	{Á}{{\'A}}1
+	{É}{{\'E}}1
+	{Í}{{\'I}}1
+	{Ó}{{\'O}}1
+	{Ú}{{\'U}}1
+	{ñ}{{\~n}}1
+	{Ñ}{{\~N}}1
+	{¿}{{\textquestiondown}}1
+	{¡}{{\textexclamdown}}1
+}
+
+
+
+\lstdefinestyle{colab}{
+	language=Python,
+	backgroundcolor=\color{colab-bg},
+	basicstyle=\ttfamily\tiny\color{colab-text},
+	keywordstyle=\color{colab-keyword}\bfseries,
+	stringstyle=\color{colab-string},
+	commentstyle=\color{colab-comment}\itshape,
+	identifierstyle=\color{colab-func},
+	numbers=left,
+	numberstyle=\tiny\color{colab-number},
+	numbersep=8pt,
+	frame=single,
+	rulecolor=\color{colab-frame},
+	breaklines=true,
+	showstringspaces=false,
+	columns=fullflexible,
+	keepspaces=true,
+	xleftmargin=3pt,
+	framexleftmargin=3pt
+}
+
+
+
+
+
+
+\title[Minería de Datos - Cancer Data]{Aplicación de la Metodología CRISP-DM para el Análisis de Datos de Cáncer}
+\author{Guevara - Hernández}
+\institute{UCV}
+\date{2026}
+
+\begin{document}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	\section{Introducción}
+	\begin{frame}{Introducción}
+		La minería de datos se define como el proceso de descubrir conocimiento o patrones implícitos, desconocidos y potencialmente útiles a partir de los datos. En este proyecto, aplicamos este proceso a un conjunto de datos médicos para facilitar la toma de decisiones clínicas.
+	\end{frame}
+	
+	\section{Justificación de la metodología}
+	\begin{frame}{Justificación de CRISP-DM (I)}
+		La elección de CRISP-DM como marco de trabajo se fundamenta en su posición como estándar de facto en la industria.
+		\begin{itemize}
+			\item<1-> \textbf{Orientación al Negocio:} A diferencia de modelos puramente técnicos como SEMMA, CRISP-DM inicia con el entendimiento de los objetivos comerciales y criterios de éxito.
+			\item<2-> \textbf{Reducción de Riesgos:} Sistematiza el desarrollo, lo que permite minimizar las probabilidades de reprocesos costosos durante el ciclo de vida del proyecto.
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Justificación de CRISP-DM (II)}
+		\begin{itemize}
+			\item<1-> \textbf{Ciclo Iterativo y Flexible:} Su naturaleza no es lineal; permite retroceder entre fases (ej. del Modelado a la Preparación de Datos) según los hallazgos técnicos.
+			\item<2-> \textbf{Visión de Despliegue:} Incluye explícitamente el mantenimiento y monitoreo, fases críticas para gestionar la "deuda técnica'' en sistemas de aprendizaje automático.
+			\item<3-> \textbf{Interdisciplinariedad:} Facilita la colaboración entre expertos del dominio y analistas de datos.
+		\end{itemize}
+	\end{frame}
+	
+	\subsection{Etapa de CRISPM-DM}
+	\begin{frame}{Etapas de CRISP-DM (I): Entendimiento}
+		Las fases iniciales sientan las bases del conocimiento necesario para el éxito del proyecto.
+		\begin{enumerate}
+			\item<1-> \textbf{Entendimiento del Negocio:}
+			\begin{itemize}
+				\item Definición de objetivos cuantificables.
+				\item Evaluación de recursos, riesgos y relación costo-beneficio.
+			\end{itemize}
+			\item<2-> \textbf{Entendimiento de los Datos:}
+			\begin{itemize}
+				\item Recolección inicial y descripción de atributos.
+				\item Análisis de calidad (identificación de valores nulos, anómalos o sesgos).
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Etapas de CRISP-DM (II): Acción Técnica}
+		En esta etapa se concentra el mayor esfuerzo computacional y analítico.
+		\begin{enumerate}
+			\setcounter{enumi}{2}
+			\item \textbf{Preparación de los Datos:}
+			\begin{itemize}
+				\item Preprocesamiento estructural (\textit{Tidy Data}) y funcional (escalamiento, codificación).
+				\item Representa aproximadamente el 80\% del tiempo del proyecto.
+			\end{itemize}
+			\item<2-> \textbf{Modelado:}
+			\begin{itemize}
+				\item Selección de algoritmos (clasificación, regresión, agrupación).
+				\item Configuración de hiperparámetros y diseño de pruebas de robustez.
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Etapas de CRISP-DM (III): Cierre y Valor}
+		Se verifica que el conocimiento extraído sea realmente útil y aplicable.
+		\begin{enumerate}
+			\setcounter{enumi}{4}
+			\item \textbf{Evaluación del Modelo:}
+			\begin{itemize}
+				\item Comparación de resultados frente a los objetivos de negocio.
+				\item Análisis de métricas técnicas (Precisión, F1-Score) y lógicas.
+			\end{itemize}
+			\item<2-> \textbf{Despliegue:}
+			\begin{itemize}
+				\item Plan de implementación (APIs, integración en sistemas).
+				\item Reporte final, documentación técnica y plan de mantenimiento.
+			\end{itemize}
+		\end{enumerate}
+	\end{frame}
+	
+	\section{Fase 1. Entendimiento del Negocio}
+	\begin{frame}{Fase 1: Entendimiento del Negocio y los Datos}
+		Según el estándar CRISP-DM, antes de cualquier procesamiento técnico, se deben ejecutar las siguientes acciones estratégicas sobre el dataset de \textit{Cancer Data}:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Establecimiento de Objetivos:} Definir el problema como una tarea de \textit{clasificación binaria} para predecir la malignidad de un tumor basándose en atributos celulares.
+			\item<3-> \textbf{Criterios de Éxito:} Determinar métricas de rendimiento críticas. En este contexto médico, es vital minimizar los \textit{falsos negativos} mediante el análisis de la Matriz de Confusión y el F1-Score.
+			\item<4-> \textbf{Reporte de Calidad de Datos:} Realizar una auditoría inicial para detectar:
+			\begin{itemize}
+				\item Presencia de valores nulos o ausentes que requieran imputación.
+				\item Consistencia en el formato de las variables numéricas (radio, textura, perímetro).
+				\item Identificación de \textit{outliers} que puedan sesgar el modelo predictivo.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Estructura y Características del Dataset (Fase 1)}
+		Este conjunto de datos (\href{https://www.kaggle.com/datasets/erdemtaha/cancer-data}{Aquí el link})  se compone de características visuales extraídas de muestras celulares para el diagnóstico clínico de cáncer de mama.
+		
+		El conjunto de datos contiene 569 instancias con 32 atributos iniciales que describen las características de núcleos celulares extraídos mediante aspiración con aguja fina.
+		
+		\begin{itemize}
+			\item<2-> \textbf{id:} Identificador único para cada paciente. No posee valor predictivo y debe ser excluido durante el modelado para evitar sobreajuste.
+			\item<3-> \textbf{diagnosis:} Variable objetivo (target) de tipo categórico ($enum$). Indica el estado clínico de la muestra:
+			\begin{itemize}
+				\item \textbf{M (Maligno):} Presencia de células cancerígenas.
+				\item \textbf{B (Benigno):} Ausencia de malignidad.
+			\end{itemize}
+		\end{itemize}
+		
+		\onslide<4->\textbf{Nota técnica:} La proporción aproximada es de 63\% benignos y 37\% malignos, lo que requiere considerar el balanceo de clases en la evaluación.
+	\end{frame}
+	
+	\begin{frame}{Definición de Características Visuales (Fase 1)}
+		Se computan 10 características base para cada núcleo celular a partir de imágenes digitalizadas:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Radio (radius):} Media de las distancias desde el centro hacia los puntos del perímetro.
+			\item<3-> \textbf{Textura (texture):} Desviación estándar de los valores de la escala de grises en la imagen.
+			\item<4-> \textbf{Perímetro (perimeter):} Longitud del contorno exterior del núcleo.
+			\item<5-> \textbf{Área (area):} Superficie total del núcleo celular.
+			\item<6-> \textbf{Suavidad (smoothness):} Variación local en las longitudes de los radios.
+		\end{enumerate}
+		
+		\onslide<7->\textit{Importancia:} Atributos como el área y el perímetro presentan una alta colinealidad, lo que sugiere el uso de reducción de dimensionalidad (PCA) en fases posteriores.
+	\end{frame}
+	
+	\begin{frame}{Definición de Características Visuales (Fase 1)}
+		Las siguientes métricas describen la complejidad y forma del núcleo:
+		
+		\begin{enumerate}
+			\setcounter{enumi}{5}
+			\item<2-> \textbf{Compacidad (compactness):} Se calcula como $\text{perímetro}^2 / \text{área} - 1.0$.
+			\item<3-> \textbf{Concavidad (concavity):} Gravedad de las porciones cóncavas del contorno.
+			\item<4-> \textbf{Puntos cóncavos (concave points):} Número de porciones cóncavas en el contorno.
+			\item<5-> \textbf{Simetría (symmetry):} Balance de la forma del núcleo.
+			\item<6-> \textbf{Dimensión fractal (fractal dimension):} Aproximación de la "línea de costa'' o complejidad del borde.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Desglose de las 30 Variables Numéricas (Fase 1)}
+		Para cada una de las 10 características base, el dataset registra tres valores estadísticos, resultando en las 30 columnas predictoras finales:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Media (Mean):} El valor promedio de la característica en la muestra (ej. \texttt{radius\_mean}).
+			\item<3-> \textbf{Error Estándar (SE):} La variabilidad o error en la medición (ej. \texttt{radius\_se}).
+			\item<4-> \textbf{Peor Caso (Worst):} La media de los tres valores más grandes registrados para esa característica (ej. \texttt{radius\_worst}).
+		\end{itemize}
+		
+		\onslide<5->\textbf{Consideración de Preprocesamiento:} Debido a que las variables tienen escalas muy diferentes (ej. el área está en cientos mientras la dimensión fractal en decimales), es obligatorio aplicar \textit{Standardization} antes de usar algoritmos sensibles a la distancia como k-NN.
+	\end{frame}
+	
+	\section{Fase 2. Preparación de Datos (Preprocesamiento)}
+	\begin{frame}{Fase 2: Preparación de Datos (Preprocesamiento)}
+		Es la etapa que más tiempo consume, asegurando que los datos sean estructural y funcionalmente correctos.
+		\begin{itemize}
+			\item<2-> \textbf{Preprocesamiento Estructural:} Garantizar el formato \textit{Tidy Data} (una variable por columna, una observación por fila).
+			\item<3-> \textbf{Preprocesamiento Funcional:}
+			\begin{itemize}
+				\item \textbf{Escalamiento:} Aplicar \textit{StandardScaler} o \textit{MinMaxScaler} para que las variables tengan rangos comparables.
+				\item \textbf{Codificación:} Transformar la variable objetivo (Diagnosis) de categórica a numérica (0/1) para el modelado.
+				\item \textbf{Reducción de Dimensionalidad:} Evaluar el uso de PCA para reducir el ruido si existen atributos altamente correlacionados.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+			
+	\begin{frame}{Utilidad del Dataset y Análisis Exploratorio (EDA) (Fase 2)}
+		El propósito fundamental es el entrenamiento y validación de algoritmos de diagnóstico médico asistido por computadora,.
+		\begin{itemize}
+			\item<2-> \textbf{Distribución de Rangos:} Cada característica se asigna a tablas de frecuencia que contienen la cantidad de valores en rangos específicos,.
+			\item<3-> \textbf{Análisis Visual:} El uso de histogramas permite examinar la dispersión de las medias visuales del cáncer para detectar grupos naturales,.
+			\item<4-> \textbf{Preprocesamiento Sugerido:} Debido a que las características numéricas tienen rangos dispares (ej. área vs suavidad), es necesario aplicar \textit{escalamiento funcional} (Standardization) para garantizar la convergencia de los modelos,.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Preprocesamiento de los datos (Fase 2)}
+		La carga del dataset se realiza mediante la librería \textit{pandas}, estándar industrial para el manejo de datos tabulares en Python.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+import pandas as pd
+# Carga del conjunto de datos
+df = pd.read_csv("Cancer_Data.csv")
+# Verificación de las primeras 5 filas
+df.head()
+		\end{lstlisting}
+		
+		\onslide<3->\textbf{Observaciones de la Muestra (Schema Checking):}
+		\begin{itemize}
+			\item \textbf{Verificación de Columnas:} Se confirman 32 atributos iniciales.
+			\item \textbf{Calidad Inicial:} La instrucción df.head() permite validar la consistencia.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Verificación de Valores Nulos y Faltantes (Fase 2)}
+		Dentro del proceso de minería de datos, la identificación de nulos es un criterio estático de calidad fundamental por las siguientes razones:
+		\begin{itemize}
+			\item<2-> \textbf{Análisis de Completitud:} Permite evaluar si la representación física de los datos contiene información suficiente para el análisis funcional.
+			\item<3-> \textbf{Detección de Sesgos:} La ausencia sistemática de datos puede introducir sesgos indeseados en el entrenamiento de modelos predictivos.
+			\item<4-> \textbf{Planificación de Limpieza:} Es el insumo principal para decidir entre técnicas de \textit{eliminación} o \textit{imputación} (simple o avanzada) en la fase de Preparación de Datos.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación de la Auditoría en Python (Fase 2)}
+		Utilizando la librería \textit{pandas}, se cuantifica la disparidad en la completitud de las variables mediante un resumen estadístico:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# Identificacion de nulos por columna
+missing_values = df.isnull().sum()
+missing_percentage = (missing_values / len(df)) * 100
+
+# Resumen estructurado
+missing_df = pd.DataFrame({
+	'Missing Count': missing_values,
+	'Missing Percentage (%)': missing_percentage
+})
+
+# Filtrado de columnas afectadas
+missing_df = missing_df[missing_df['Missing Count'] > 0].sort_values(by='Missing Percentage (%)', ascending=False)
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Resultados de la Auditoría y Hallazgos Técnicos (Fase 2)}
+		El reporte de calidad sobre el dataset \textit{Cancer Data} arroja los siguientes resultados críticos:
+		
+		\onslide<2->\begin{table}
+			\centering
+			\begin{tabular}{|l|c|c|}
+				\hline
+				\textbf{Columna} & \textbf{Missing Count} & \textbf{Missing Percentage (\%)} \\ \hline
+				\texttt{Unnamed: 32} & 569 & 100.0 \\ \hline
+			\end{tabular}
+			\caption{Resumen de valores faltantes detectados.}
+		\end{table}
+		
+		\begin{itemize}
+			\item<3-> \textbf{Anomalía Estructural:} La columna \texttt{Unnamed: 32} no aporta valor predictivo y representa un ruido en la estructura de los datos.
+			\item<4-> \textbf{Acción Sugerida:} Se debe proceder a su eliminación total durante el preprocesamiento estructural para cumplir con los principios de \textit{Tidy Data} (cada columna debe ser una variable).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Tratamiento de Valores Nulos y Faltantes (Fase 2)}
+		Tras identificar que la columna \texttt{Unnamed: 32} posee un 100\% de valores faltantes, se aplica una técnica de \textbf{preprocesamiento estructural} mediante la eliminación de la variable.
+		
+		\onslide<2->\begin{itemize}
+			\item \textbf{Justificación:} Según los principios de \textit{Tidy Data}, cada columna debe representar una variable informativa. Una columna vacía no aporta valor predictivo y genera redundancia innecesaria.
+		\end{itemize}
+		
+		\onslide<3->\begin{lstlisting}[style=colab]
+# Eliminacion de columna no informativa (Ruido estructural)
+df = df.drop('Unnamed: 32', axis=1)
+
+# Verificacion de la consistencia del DataFrame
+df.info()
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Verificación de Completitud y Consistencia (Fase 2)}
+		El resultado de la limpieza asegura que el dataset cumpla con el requerimiento funcional de contener información suficiente para el análisis:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Completitud:} Todas las columnas predictoras cuentan ahora con 569 registros \textit{non-null}, garantizando un dataset íntegro para el modelado.
+			\item<3-> \textbf{Estructura Final:} Se conservan 32 columnas (1 ID, 1 Diagnosis y 30 medidas celulares numéricas).
+			\item<4-> \textbf{Tipos de Datos:} Se confirma la consistencia de tipos: \texttt{float64} para métricas físicas y \texttt{object} para la variable categórica de diagnóstico.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Auditoría de Calidad - Registros Duplicados (Fase 2)}
+		La presencia de registros duplicados es un problema de calidad que puede sesgar los análisis estadísticos y sobreajustar los modelos predictivos.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Objetivo:} Identificar filas idénticas que representen redundancia en la colección de hechos.
+		\end{itemize}
+		
+		\onslide<3->\begin{lstlisting}[style=colab]
+# Comprobar filas completamente duplicadas
+duplicate_rows = df.duplicated().sum()
+print(f"Total de filas duplicadas: {duplicate_rows}")
+		\end{lstlisting}
+		
+		\onslide<4->\textbf{Resultado del Hallazgo:}
+		\begin{itemize}
+			\item \textbf{Filas Duplicadas:} 0.
+			\item \textbf{Interpretación:} El dataset presenta unicidad en sus observaciones, lo que garantiza que cada registro contribuya con información independiente al entrenamiento del modelo.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Consistencia de Tipos y Valores (Fase 2)}
+		Analizar los valores únicos en variables categóricas permite detectar errores de formato o inconsistencias semánticas que afectan la fiabilidad.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# Analisis de valores unicos en la variable objetivo
+print("Valores unicos para la columna 'diagnosis':")
+print(df['diagnosis'].unique())
+		\end{lstlisting}
+		
+		\textbf{Importancia de la Verificación:}
+		\begin{itemize}
+			\item<2-> \textbf{Validación de Dominio:} En este dataset médico, se espera únicamente la presencia de 'M' (Maligno) y 'B' (Benigno).
+			\item<3-> \textbf{Detección de Ruido:} Valores inesperados (ej. 'm', 'b', o nulos disfrazados) requerirían una fase de normalización estructural inmediata antes del modelado.
+			\item<4-> \textbf{Consistencia de Tipos:} Se confirma que la representación física sea coherente con el significado esperado para una tarea de clasificación binaria.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Caracterización de Datos y Outliers (Fase 2)}
+		El Análisis Exploratorio de Datos (EDA) busca comprender las estructuras y dinámicas del dataset antes del modelado. En esta etapa, la visualización de distribuciones cumple funciones críticas:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Caracterización:} Permite resumir y entender las propiedades de los atributos numéricos (como \texttt{radius\_mean} o \texttt{area\_mean}) a través de histogramas y frecuencias.
+			\item<3-> \textbf{Identificación de Outliers:} Detectar valores anómalos es un criterio estático de calidad, ya que estos pueden sesgar modelos no robustos.
+			\item<4-> \textbf{Validación de Asunciones:} El uso de la estimación de densidad de kernel (KDE) asiste en la identificación visual de la normalidad o el sesgo (\textit{skewness}) de las variables continuas.
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}[fragile]{Implementación de Histogramas y KDE (Fase 2)}
+		Se implementa un ciclo de inspección visual utilizando \textit{seaborn} para generar perfiles de distribución de los atributos físicos celulares, excluyendo el identificador (\texttt{id}):
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Identificar columnas numericas, excluyendo 'id' por ser no informativa
+numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.drop('id', errors='ignore')
+
+# Generar histogramas con KDE para cada atributo
+for col in numerical_cols:
+plt.figure(figsize=(8, 4))
+sns.histplot(df[col], kde=True, color='steelblue')
+plt.title(f'Distribucion y Densidad de {col}')
+plt.xlabel(col)
+plt.ylabel('Frecuencia')
+plt.show()
+		\end{lstlisting}
+		
+		\onslide<3->\textbf{Nota técnica:} Si se observa un sesgo pronunciado en las gráficas, se recomienda aplicar una \textit{Estandarización} o transformaciones no lineales en la Fase 3.
+	\end{frame}
+	
+	
+	\begin{frame}{Caracterización de Atributos mediante Histogramas (Fase 2)}
+		La inspección visual de estas variables permite comprender la densidad de probabilidad y detectar el sesgo (\textit{skewness}). Se presentan algunos ejemplos
+		
+		\begin{columns}[c]
+			\onslide<2->\begin{column}{0.48\textwidth}
+				\centering
+				\includegraphics[width=0.8\textwidth]{img/smoothness_mean.png} 
+				\vspace{0.1cm}
+				\includegraphics[width=0.8\textwidth]{img/fractal_dimension_worst.png} 
+			\end{column}
+			
+			\onslide<3->\begin{column}{0.48\textwidth}
+				\centering
+				\includegraphics[width=0.8\textwidth]{img/texture_mean.png} 
+				\vspace{0.1cm}
+				\includegraphics[width=0.8\textwidth]{img/concavity_worst.png}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Caracterización de los Datos: Tendencias Centrales (Fase 2)}
+		El análisis exploratorio permite resumir las propiedades de los atributos mediante histogramas y frecuencias.
+		\begin{itemize}
+			\item<2-> \textbf{Distribuciones Variadas:} Se observa diversidad morfológica en las distribuciones del dataset.
+			\item<3-> \textbf{Simetría Central:} Variables como \texttt{texture\_mean} y \texttt{smoothness\_mean} presentan una concentración central clara, tendiendo a la normalidad o con sesgos leves.
+			\item<4-> \textbf{Concentración:} La mayor proporción de observaciones reside en bins centrales o iniciales, definiendo el rango de valores "comunes" para las muestras celulares.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis de Sesgo Positivo (Cola Larga) (Fase 2)}
+		El sesgo (\textit{skewness}) es un indicador de no-normalidad crítico para la selección de algoritmos.
+		\begin{itemize}
+			\item<2-> \textbf{Fenómeno Detectado:} Atributos de error estándar (\texttt{\_se}) y peor caso (\texttt{\_worst}) muestran un \textbf{sesgo positivo} ($skew > 1$).
+			\item<3-> \textbf{Ejemplos Críticos:} \texttt{perimeter\_se}, \texttt{area\_se}, \texttt{concavity\_worst} y \texttt{fractal\_dimension\_worst}.
+			\item<4-> \textbf{Interpretación Médica:} La mayoría de los datos se agrupan en rangos bajos (normalidad), mientras que casos severos forman la "cola larga" hacia la derecha.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Detección de Valores Atípicos (Outliers) (Fase 2)}
+		La identificación de anomalías es un criterio estático de calidad fundamental en minería de datos.
+		\begin{itemize}
+			\item<2-> \textbf{Evidencia en Histogramas:} Bins aislados con frecuencias mínimas (1 a 3 ocurrencias) y grandes saltos de valor sugieren \textit{outliers}.
+			\item<3-> \textbf{Caso de Estudio (\texttt{area\_worst}):} Mientras la masa principal está bajo 1500, ocurrencias aisladas en el rango 2000-2500 son candidatos a eliminación o tratamiento especial.
+			\item<4-> \textbf{Riesgo:} Ignorar estos valores puede sesgar modelos no robustos y afectar la capacidad de generalización.
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Preparación de Datos - Estrategias de Ingeniería (Fase 2)}
+		Los hallazgos del Análisis Exploratorio (EDA) determinan las transformaciones funcionales necesarias para garantizar la fiabilidad del modelo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Transformaciones No Lineales:} Para mitigar el sesgo positivo detectado en las variables \texttt{\_worst}, se sugiere aplicar \onslide<3->\textbf{logaritmo} (\texttt{np.log1p}) o raíz cuadrada para normalizar la distribución.
+			\item<4-> \textbf{Gestión de Outliers:} Basado en el impacto y el dominio médico, se proponen tres enfoques técnicos:
+			\begin{enumerate}
+				\item<5-> \textbf{Winsorización:} Limitación de valores extremos mediante umbrales.
+				\item<6-> \textbf{Robust Scaling:} Uso de \texttt{RobustScaler} (basado en mediana e IQR) para minimizar la influencia de anómalos sin eliminarlos.
+				\item<7-> \textbf{Preservación (No intervención):} Mantener los valores íntegros si son indicativos de malignidad (ej. picos de concavidad), optando por algoritmos robustos a distribuciones extremas como los simbólicos.
+			\end{enumerate}
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Justificación de la Correlación Geométrica (Fase 2)}
+		Durante el análisis exploratorio (EDA), se identifica una fuerte correlación entre \texttt{radius\_mean}, \texttt{perimeter\_mean} y \texttt{area\_mean}. Este fenómeno es un "hecho de datos" derivado de la morfología celular,:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Relación Radio-Perímetro:} Dada la aproximación circular de los núcleos tumorales, el perímetro ($P \approx 2\pi r$) mantiene una fuerte dependencia lineal con el radio,.
+			\item<3-> \textbf{Relación Radio-Área:} La superficie ($A \approx \pi r^2$) presenta una relación cuadrática que, en los rangos observados, se manifiesta como una correlación positiva extrema,.
+		\end{itemize}
+	\end{frame}
+	
+		\begin{frame}{El Problema de la Multicolinealidad (Fase 2)}
+		La alta interdependencia entre variables numéricas dificulta la atribución de comportamiento y genera inestabilidad en las técnicas de modelado,:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Inestabilidad del Modelo:} Los coeficientes de modelos lineales (como Regresión Logística) se vuelven erráticos y difíciles de interpretar,.
+			\item<3-> \textbf{Sobreajuste (Overfitting):} El sistema puede aprender ruidos específicos de la muestra que no generalizan ante nuevos datos.
+			\item<4-> \textbf{Degradación de la Interpretabilidad:} Resulta complejo discernir la contribución individual de cada medida geométrica al diagnóstico final,.
+		\end{enumerate}
+	\end{frame}
+	
+	
+	\begin{frame}{Reducción de Dimensionalidad por Selección (Fase 2)}
+		Para mitigar la multicolinealidad, se aplica una técnica de \textit{reducción por selección} basada en conocimiento del dominio,:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Estrategia:} Eliminar variables redundantes para incrementar la información contenida por atributo y optimizar recursos computacionales,.
+			\item<3-> \textbf{Criterio de Selección:} Se propone mantener únicamente \texttt{perimeter\_mean} como representante de la dimensión geométrica básica, debido a su relevancia en la interpretación clínica,.
+			\item<4-> \textbf{Acción Técnica:} Exclusión de \texttt{radius\_mean} y \texttt{area\_mean} en el pipeline de preparación de datos antes del entrenamiento de clasificadores supervisados,.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Interdependencia en Métricas Derivadas (Fase 2)}
+		El análisis de correlación realizado sobre las medias se extiende de forma natural a las dimensiones de variabilidad (\textit{se}) y valores extremos (\textit{worst}), ya que responden a los mismos principios físicos:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Consistencia Geométrica:} Las relaciones entre radio, perímetro y área se mantienen constantes independientemente del estadístico calculado ($mean, se, worst$).
+			\item<3-> \textbf{Métricas de Error Estándar (\_se):} La variabilidad en la medición del radio (\texttt{radius\_se}) está intrínsecamente ligada a la del perímetro y el área, generando redundancia informativa.
+			\item<4-> \textbf{Métricas del Peor Caso (\_worst):} Los valores más extremos observados replican la misma dependencia lineal y cuadrática de la morfología tumoral.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Identificación de Grupos Multicolineales (Fase 2)}
+		La auditoría de datos permite agrupar las variables en clústeres de alta correlación que consumen recursos computacionales sin aportar conocimiento incremental:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Grupo de Variabilidad (SE):}
+			\begin{itemize}
+				\item \{\texttt{radius\_se}, \texttt{perimeter\_se}, \texttt{area\_se}\}
+			\end{itemize}
+			\item<3-> \textbf{Grupo de Extremos (Worst):}
+			\begin{itemize}
+				\item \{\texttt{radius\_worst}, \texttt{perimeter\_worst}, \texttt{area\_worst}\}
+			\end{itemize}
+		\end{enumerate}
+		\onslide<4->\textbf{Riesgo Técnico:} Mantener estas 6 variables juntas en un modelo de aprendizaje automático puede provocar \textit{sobreajuste} y degradar la estabilidad de los coeficientes en algoritmos lineales.
+	\end{frame}
+	
+	\begin{frame}{Reducción por Selección de Atributos (Fase 2)}
+		Para optimizar la capacidad de generalización, se aplica una técnica de \textit{reducción por selección} basada en conocimiento experto del dominio:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Acción sobre SE:} Eliminación de \texttt{radius\_se} y \texttt{area\_se}, preservando únicamente \textbf{\texttt{perimeter\_se}} como el descriptor de variabilidad geométrica.
+			\item<3-> \textbf{Acción sobre Worst:} Eliminación de \texttt{radius\_worst} y \texttt{area\_worst}, manteniendo \textbf{\texttt{perimeter\_worst}} como representante de la dimensión más extrema de la muestra.
+			\item<4-> \textbf{Resultado esperado:} Un dataset funcionalmente más robusto, con variables más informativas y menor deuda técnica estructural.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Fundamento Geométrico de la Correlación (Fase 2)}
+		La fuerte correlación entre \texttt{radius}, \texttt{perimeter} y \texttt{area} en sus variantes (\textit{mean}, \textit{se}, \textit{worst}) se explica por la morfología aproximadamente circular de las estructuras celulares:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Relación radio–perímetro:} $P \approx 2\pi r$, lo que induce dependencia lineal.
+			\item<3-> \textbf{Relación radio–área:} $A \approx \pi r^2$, generando correlación cuadrática pero altamente monotónica.
+		\end{itemize}
+		
+		\onslide<3->Estas relaciones se mantienen constantes para cualquier estadístico calculado.
+	\end{frame}
+	
+	
+	\begin{frame}{Impacto en el Modelado: Multicolinealidad (Fase 2)}
+		La presencia simultánea de variables geométricamente derivadas produce:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Inestabilidad en modelos lineales:} coeficientes sensibles a pequeñas variaciones.
+			\item<3-> \textbf{Sobreajuste:} el modelo aprende redundancias sin valor predictivo adicional.
+			\item<4-> \textbf{Pérdida de interpretabilidad:} difícil atribuir contribuciones individuales.
+		\end{enumerate}
+		
+		\onslide<4->La multicolinealidad afecta por igual a las métricas \textit{mean}, \textit{se} y \textit{worst}.
+	\end{frame}
+	
+	\begin{frame}{Agrupación de Variables Altamente Correlacionadas (Fase 2)}
+		El análisis de correlación permite identificar tres bloques redundantes:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Medias:} \{\texttt{radius\_mean}, \texttt{perimeter\_mean}, \texttt{area\_mean}\}
+			\item<3-> \textbf{Variabilidad (SE):} \{\texttt{radius\_se}, \texttt{perimeter\_se}, \texttt{area\_se}\}
+			\item<4-> \textbf{Extremos (Worst):} \{\texttt{radius\_worst}, \texttt{perimeter\_worst}, \texttt{area\_worst}\}
+		\end{itemize}
+		
+		\onslide<4->Cada grupo describe la misma dimensión geométrica bajo un estadístico distinto.
+	\end{frame}
+	
+	
+	\begin{frame}{Criterio Unificado de Reducción por Selección (Fase 2)}
+		Para evitar redundancia y mejorar la estabilidad del modelo, se adopta un criterio único:
+		
+		\onslide<2->\begin{block}{\centering \textbf{Conservar únicamente la variable \texttt{perimeter} en cada grupo estadístico}}
+		\end{block}
+		
+		Justificación:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Interpretabilidad clínica:} el perímetro refleja irregularidad del contorno tumoral.
+			\item<3-> \textbf{Estabilidad numérica:} evita la transformación cuadrática del área.
+			\item<4-> \textbf{Representatividad:} captura la misma información geométrica que radio y área.
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Aplicación del Criterio a SE y Worst (Fase 2)}
+		El criterio geométrico se extiende naturalmente a las métricas derivadas:
+		
+		\begin{itemize}
+			\item<2-> \textbf{SE:} se eliminan \texttt{radius\_se} y \texttt{area\_se}, conservando \texttt{perimeter\_se}.
+			\item<3-> \textbf{Worst:} se eliminan \texttt{radius\_worst} y \texttt{area\_worst}, conservando \texttt{perimeter\_worst}.
+		\end{itemize}
+		
+		\onslide<3->Esto reduce la redundancia informativa en las dimensiones de variabilidad y extremos.
+	\end{frame}
+	
+	
+	\begin{frame}{Resultado Final del Proceso de Selección (Fase 2)}
+		\textbf{Variables eliminadas:}
+		
+		\begin{itemize}
+			\item \texttt{radius\_mean}, \texttt{area\_mean}
+			\item \texttt{radius\_se}, \texttt{area\_se}
+			\item \texttt{radius\_worst}, \texttt{area\_worst}
+		\end{itemize}
+		
+		\onslide<2->\textbf{Variables retenidas como representantes geométricos:}
+		
+		\begin{itemize}
+			\item \texttt{perimeter\_mean}
+			\item \texttt{perimeter\_se}
+			\item \texttt{perimeter\_worst}
+		\end{itemize}
+		
+		El resultado es un dataset más compacto, estable y con menor riesgo de sobreajuste.
+	\end{frame}
+	
+	\begin{frame}{Tratamiento de la Multicolinealidad (Fase 2)}
+		La eliminación de variables altamente correlacionadas es un paso crítico de \textbf{preprocesamiento funcional} para aumentar la fiabilidad del modelo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Objetivo:} Reducir la redundancia informativa en las categorías \textit{mean}, \textit{se} y \textit{worst} derivada de la geometría tumoral.
+			\item<3-> \textbf{Criterio de Selección:} Se preservan los perímetros como representantes de cada grupo por su estabilidad y relevancia clínica.
+			\item<4-> \textbf{Beneficios Esperados:} 
+			\begin{itemize}
+				\item Disminución de recursos computacionales.
+				\item Incremento de la información contenida en cada variable restante.
+				\item Reducción de la "deuda técnica'' al evitar características correlacionadas que generan fragilidad en el modelo.
+			\end{itemize}
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación en Python: Eliminación de Columnas (Fase 2)}
+		Se utiliza el método \texttt{drop} de \textit{pandas} para reestructurar el DataFrame según el diseño de variables informativas definido:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# Eliminacion de columnas correlacionadas en las tres categorias
+df = df.drop(columns=[
+'radius_mean', 'area_mean', 
+'radius_se', 'area_se', 
+'radius_worst', 'area_worst'
+])
+
+# Verificacion de la integridad del esquema
+print("Informacion del DataFrame tras la limpieza:")
+df.info()
+		\end{lstlisting}
+		
+		\onslide<3->\textbf{Nota técnica:} Esta operación transforma la representación física de los datos para cumplir con el requerimiento funcional de contener información suficiente y no redundante para el análisis.
+	\end{frame}
+	
+	\begin{frame}{Verificación del Dataset Final (Fase 2)}
+		Tras la reducción, el conjunto de datos alcanza un estado óptimo para el entrenamiento de algoritmos:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Estructura Final:} 25 columnas (24 predictores numéricos y 1 variable objetivo).
+			\item<3-> \textbf{Memoria Optimizada:} El uso de memoria se reduce a aproximadamente 115.7+ KB, facilitando iteraciones más veloces.
+			\item<4-> \textbf{Estado de Calidad:} Se mantiene la completitud (569 registros no nulos por columna) y la consistencia de tipos (\texttt{float64}, \texttt{int64}, \texttt{object}).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Visualización de Distribuciones por Diagnóstico (Fase 2)}
+		Para comprender la disparidad entre los grupos Benigno ('B') y Maligno ('M'), se emplean técnicas de visualización que contrastan medidas de centralidad y dispersión.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Boxplots (Diagramas de Caja):} Ofrecen un resumen estadístico compacto que incluye la mediana, los cuartiles (25\% y 75\%) y el Rango Intercuartílico (IQR). Son la herramienta estándar para la identificación visual de \textit{outliers} mediante sus 'bigotes'.
+			\item<3-> \textbf{Stripplots (Diagramas de Puntos):} Complementan al boxplot graficando cada observación individual. Esto permite observar la densidad real de los datos y detectar agrupaciones o "hechos de datos" que el resumen estadístico podría ocultar.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Objetivos de la Discriminación Visual (Fase 2)}
+		La combinación de estas gráficas permite extraer conocimiento implícito y potencialmente útil para las etapas posteriores de modelado:
+		\begin{enumerate}
+			\item<2-> \textbf{Comparación de Perfiles:} Determinar si las medianas y la variabilidad de los atributos físicos celulares difieren significativamente según el diagnóstico.
+			\item<3-> \textbf{Selección de Predictores:} Identificar características cuyas distribuciones están claramente separadas, ya que estas poseen una alta capacidad discriminatoria para algoritmos de clasificación.
+			\item<4-> \textbf{Auditoría de Outliers:} Detectar puntos anómalos dentro de cada grupo. En datos médicos, estos valores extremos pueden ser indicativos críticos de patologías severas y no necesariamente errores de captura.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación Técnica y Estandarización (Fase 2)}
+		Debido a que los atributos poseen escalas heterogéneas (ej. área vs suavidad), se requiere un \textbf{preprocesamiento funcional} de estandarización antes de la visualización.
+		\vspace{10pt}
+		
+		
+		\textbf{Nota:} El uso de \textit{StandardScaler} garantiza que la influencia visual de cada variable sea equilibrada durante la inspección.
+	\end{frame}
+	
+	\begin{frame}[fragile]{1. Preparación del Entorno y Selección de Atributos (Fase 2)}
+		El primer bloque se encarga de importar las librerías de análisis y filtrar variables no informativas para el modelo predictivo.
+		\onslide<2->\begin{lstlisting}[style=colab]
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+import math
+
+# 1. Seleccionar columnas numericas excluyendo 'id'
+# El identificador no aporta valor estadistico al analisis
+numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.drop('id', errors='ignore')
+		\end{lstlisting}
+		\onslide<3->\textbf{Nota:} Excluir el \texttt{id} es crítico para evitar que el modelo aprenda ruidos estructurales.
+	\end{frame}
+	
+	\begin{frame}[fragile]{2. Preprocesamiento Funcional: Estandarización (Fase 2)}
+		Se aplica \textit{Standardization} para que las variables con distintas magnitudes (ej. área vs suavidad) sean visualmente comparables en una misma escala.
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 2. Estandarizar las columnas numericas
+# Se busca Media 0 y Desviacion Estandar 1
+scaler = StandardScaler()
+df_scaled = df.copy()
+df_scaled[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+		\end{lstlisting}
+		\onslide<3->\textbf{Justificación:} Sin estandarización, las variables con rangos mayores dominarían la escala del gráfico, ocultando la distribución de las variables decimales.
+	\end{frame}
+	
+	\begin{frame}[fragile]{3. Diseño de la Interfaz de Visualización (Fase 2)}
+		Se calcula dinámicamente la disposición de los gráficos para optimizar el espacio en el reporte de calidad de datos.
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 3. Crear cuadricula para los graficos
+num_cols = len(numerical_cols)
+cols = 4  # numero de columnas en la cuadricula
+rows = math.ceil(num_cols / cols)
+
+plt.figure(figsize=(22, 5 * rows))
+		\end{lstlisting}
+		\onslide<3->\textbf{Objetivo:} Generar una cuadrícula escalable que permita la inspección visual masiva de las 24 variables resultantes.
+	\end{frame}
+	
+	\begin{frame}[fragile]{4. Generación de Boxplots y Stripplots (Fase 2)}
+		Se combina el resumen estadístico (Boxplot) con la densidad puntual (Stripplot) para detectar patrones y outliers simultáneamente.
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 4. Generar boxplot + stripplot para cada variable
+for i, col in enumerate(numerical_cols, 1):
+plt.subplot(rows, cols, i)
+sns.boxplot(
+data=df_scaled, x='diagnosis', y=col, hue='diagnosis',
+palette={'M': 'salmon', 'B': 'lightgreen'},
+dodge=False, showfliers=False, legend=False
+)
+sns.stripplot(
+data=df_scaled, x='diagnosis', y=col, hue='diagnosis',
+palette={'M': 'darkred', 'B': 'green'},
+dodge=False, alpha=0.4, size=2, legend=False
+)
+plt.title(col, fontsize=12)
+plt.ylabel('Valor estandarizado')
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Análisis Discriminatorio: Boxplots y Stripplots (Fase 2)}
+		La combinación de diagramas de caja y puntos permite evaluar la capacidad predictiva de los atributos mediante la comparación de sus distribuciones estandarizadas.
+		
+		\begin{columns}[c]
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=0.55\textwidth]{img/perimeter_worst.jpg} \\
+				\vspace{0.2cm}
+				\includegraphics[width=0.55\textwidth]{img/texture_mean.jpg} \\
+			\end{column}
+			
+			\onslide<3->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=0.55\textwidth]{img/concavity_mean.jpg} \\
+				\vspace{0.2cm}
+				\includegraphics[width=0.55\textwidth]{img/concave points_worst.jpg} \\
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Visualización de Distribuciones Estandarizadas (Fase 2)}
+		La combinación de Boxplots y Stripplots permite una inspección visual profunda de la distribución de los atributos físicos celulares según el diagnóstico clínico.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Estandarización Crítica:} Se aplica \textit{StandardScaler} para transformar las variables a una escala común (Media 0, Desviación Estándar 1), facilitando la comparación de magnitudes entre atributos heterogéneos.
+			\item<3-> \textbf{Sinergia Visual:} Mientras el Boxplot resume la tendencia central y los cuartiles, el Stripplot revela la densidad real de los datos y hechos específicos de las observaciones individuales.
+		\end{itemize}
+	\end{frame}
+	
+	
+	\begin{frame}{Características con Alta Capacidad Discriminatoria (Fase 2)}
+		Se identifican atributos con una separación clara entre los grupos Benigno ('B') y Maligno ('M'), lo que sugiere una alta importancia predictiva.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Separación de IQRs:} Variables como \texttt{concave points\_worst}, \texttt{perimeter\_worst} y \texttt{concavity\_mean} muestran rangos intercuartílicos casi sin superposición.
+			\item<3-> \textbf{Patrón Detectado:} En estos casos, los valores de la clase 'M' se sitúan consistentemente por encima de la clase 'B'.
+			\item<4-> \textbf{Ejemplo Clave:} En \texttt{concave points\_worst}, la concentración de puntos Malignos en el extremo superior la define como un predictor robusto para tareas de clasificación.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis de Tendencias y Superposición Parcial (Fase 2)}
+		No todas las variables presentan una separación absoluta, pero mantienen tendencias estadísticas útiles para el conocimiento del dominio.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Superposición Moderada:} Atributos como \texttt{texture\_mean} o \texttt{smoothness\_worst} muestran solapamiento en sus cuartiles, pero conservan medianas notablemente distintas.
+			\item<3-> \textbf{Validación de Densidad:} El Stripplot asiste en confirmar que, a pesar de la superposición, las masas principales de datos siguen concentrándose en regiones discriminantes de la escala estandarizada.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Auditoría de Outliers e Implicaciones de Modelado (Fase 2)}
+		El análisis visual permite detectar "datos sucios'' o hechos extraordinarios que afectan la fiabilidad del análisis funcional.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Detección de Atípicos:} Aunque el Boxplot oculte extremos (\textit{showfliers=False}), el Stripplot expone observaciones que se alejan de la masa principal, siendo indicativos potenciales de casos clínicos severos.
+			\item<3-> \textbf{Conclusión de Selección:} Las variables con menor superposición son las candidatas principales para el entrenamiento de modelos de \textit{Machine Learning}.
+			\item<4-> \textbf{Criterio Estático:} La visualización confirma que los datos poseen la calidad suficiente para proceder a la Fase de Modelado.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Caracterización de Datos mediante Estadísticos (Fase 2)}
+		La \textbf{caracterización de datos} es una tarea descriptiva que busca resumir y entender las propiedades de los atributos en el conjunto global.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Métrica de Resumen:} El uso de la función \texttt{describe()} permite obtener medidas de tendencia central (media) y de dispersión (desviación estándar, cuartiles).
+			\item<3-> \textbf{Exclusión del Identificador:} Se omite la columna \texttt{id}, ya que es una abstracción de un hecho que no posee valor predictivo y podría generar ruido estructural.
+			\item<4-> \textbf{Utilidad:} Facilita la detección temprana de variables con escalas dispares, lo que justifica la necesidad futura de \textit{Standardization}.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación en Python: Estadísticas y Conteo (Fase 2)}
+		Se procesan las métricas numéricas y se cuantifica la presencia de la variable objetivo mediante la librería \textit{pandas}:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 1. Generar estadisticas descriptivas (excluyendo 'id')
+descriptive_stats = df.drop(columns=['id'], errors='ignore').describe()
+display(descriptive_stats)
+
+# 2. Conteo de categorias en la variable objetivo 'diagnosis'
+diagnosis_counts = df['diagnosis'].value_counts().reset_index()
+diagnosis_counts.columns = ['Diagnosis', 'Count']
+
+print("Conteo de cada categoria en 'diagnosis':")
+print(df['diagnosis'].value_counts())
+		\end{lstlisting}
+		
+		\onslide<3->\textbf{Resultado:} Se obtiene un perfil detallado de la distribución de las 25 características físicas celulares resultantes tras la limpieza.
+	\end{frame}
+	
+	\begin{frame}{Análisis de la Variable Diagnosis (Target) (Fase 2)}
+		El análisis de la distribución de \texttt{diagnosis} (Maligno vs. Benigno) permite evaluar el \textbf{balanceo de clases}, factor crítico para evitar sesgos durante el entrenamiento de modelos de clasificación.
+		
+		\begin{columns}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Distribucion de la Variable Diagnosis.png}
+			\end{column}
+			\onslide<3->\begin{column}{0.5\textwidth}
+				\textbf{Hallazgos Visuales:}
+				\begin{itemize}
+					\item Se observa una mayor prevalencia de casos Benignos (B) sobre Malignos (M).
+					\item<3-> Esta disparidad indica que el modelo debe evaluarse con métricas robustas como F1-Score o Recall para no ignorar la clase minoritaria (M).
+				\end{itemize}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Caracterización de Datos y Reporte de Integridad (Fase 2)}
+		La caracterización de datos permite resumir y entender las propiedades de los atributos en el conjunto global mediante medidas de tendencia central y dispersión.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Integridad de Datos:} Se confirma la completitud del dataset con 569 instancias por variable tras la eliminación de ruido estructural.
+			\item<3-> \textbf{Consistencia Física:} La ausencia de valores nulos garantiza una representación física consistente para el entrenamiento de modelos de \textit{Machine Learning}.
+			\item<4-> \textbf{Resumen Estadístico:} El uso de la función \texttt{describe()} facilita la identificación de escalas heterogéneas que requerirán un preprocesamiento funcional de estandarización .
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis de Variabilidad y Rangos Físicos (Fase 2)}
+		El estudio de los rangos permite detectar hechos de datos (\textit{insights}) sobre la morfología de los núcleos celulares.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Dimensión de Extremos:} \texttt{perimeter\_worst} presenta una media de 107.26 y una alta desviación estándar ($\sigma=33.60$), reflejando una variabilidad significativa en el tamaño del tumor en sus estados más críticos.
+			\item<3-> \textbf{Regularidad Morfológica:} El valor mínimo de 0.0 en \texttt{concavity\_mean} es un indicio clínico de que ciertos núcleos poseen contornos totalmente regulares, careciendo de porciones cóncavas.
+			\item<4-> \textbf{Impacto en el Modelado:} Atributos con rangos amplios (50.41 a 251.20) pueden dominar sobre variables decimales, justificando el uso de \textit{StandardScaler}.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis de Sesgo Positivo y Outliers (Fase 2)}
+		El sesgo (\textit{skewness}) mide la no-normalidad de los atributos, siendo un factor determinante para la selección de algoritmos.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Detección por Cuartiles:} En variables como \texttt{concavity\_mean}, la proximidad de la mediana (50\%) al primer cuartil (25\%) confirma un \textbf{sesgo positivo} ($skew > 1$).
+			\item<3-> \textbf{Interpretación:} La mayoría de las observaciones se concentran en rangos bajos (normalidad), mientras que los casos severos forman la "cola larga'' a la derecha.
+			\item<4-> \textbf{Recomendación Técnica:} Ante distribuciones extremas, se sugiere optar por algoritmos simbólicos (como árboles de decisión) que no asumen normalidad en los datos.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Análisis de Balanceo en la Variable \textit{Diagnosis} (Fase 2)}
+		El análisis de la distribución de la variable objetivo es fundamental para evaluar el éxito predictivo y evitar sesgos de aprendizaje.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Frecuencias Observadas:} Contamos con 357 casos Benignos (B) y 212 Malignos (M).
+			\item<3-> \textbf{Estado de la Clase:} Existe un ligero desbalance (aproximadamente 63\% vs 37\%), lo que constituye un desafío para la generalización del modelo.
+			\item<4-> \textbf{Métricas de Evaluación:} Debido a este desbalance, el rendimiento no debe medirse solo por exactitud (\textit{accuracy}), sino mediante métricas robustas como F1-Score o Recall para asegurar la detección efectiva de la clase minoritaria (M).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Caracterización Bivariada mediante Mapas de Calor (Fase 2)}
+		El análisis de correlación es una tarea descriptiva que permite cuantificar la relación entre dos variables continuas.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Objetivo:} Identificar rápidamente relaciones fuertes (cercanas a 1 o -1), débiles (cercanas a 0) y su polaridad (positiva/negativa).
+			\item<3-> \textbf{Variable Objetivo:} Se utiliza \texttt{diagnosis\_num}, una codificación numérica donde 0 representa Benigno y 1 Maligno.
+			\item<4-> \textbf{Interpretación Visual:} Los cuadrados de colores cálidos y brillantes indican una alta interdependencia, mientras que los tonos tenues o neutros señalan independencia estadística.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Identificación de Predictores de Malignidad (Fase 2)}
+		El mapa de calor revela qué atributos físicos de los núcleos celulares poseen mayor capacidad de discriminación de datos.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Correlaciones Positivas Fuertes:} Atributos como \texttt{concave points\_worst}, \texttt{perimeter\_worst}, y \texttt{concavity\_mean} presentan una asociación directa con el diagnóstico maligno.
+			\item<3-> \textbf{Significado Clínico:} Un incremento en estas métricas (especialmente las relacionadas con irregularidades del contorno) es un indicador robusto de presencia de células cancerígenas.
+			\item<4-> \textbf{Variables con Menor Impacto:} Características como \texttt{texture\_mean} o \texttt{symmetry\_mean} muestran correlaciones débiles, sugiriendo que su aporte individual al modelo es marginal.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Persistencia de la Multicolinealidad Geométrica (Fase 2)}
+		A pesar del preprocesamiento estructural inicial, la naturaleza física del fenómeno mantiene dependencias entre variables numéricas.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Bloques de Correlación:} Se observan altas correlaciones inter-feature en los grupos \texttt{\_mean} y \texttt{\_worst} de \texttt{perimeter}, \texttt{concavity} y \texttt{concave points}.
+			\item<3-> \textbf{Justificación Geométrica:} La relación entre el perímetro y la presencia de puntos cóncavos es inherente a la morfología tumoral; si uno aumenta, los otros tienden a replicar el comportamiento.
+			\item<4-> \textbf{Redundancia Informativa:} Valores cercanos a la unidad indican que la información contenida en estas variables es redundante, lo cual es un factor crítico de calidad funcional.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Diferenciación de Algoritmos ante Multicolinealidad (Fase 2)}
+		La interdependencia entre atributos afecta de manera distinta a las técnicas de minería de datos según su fundamento matemático.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Modelos Paramétricos (Regresión Logística):} La multicolinealidad dificulta la atribución de comportamiento a variables individuales, haciendo que estos modelos sean inestables.
+			\item<3-> \textbf{Modelos Simbólicos (Árboles de Decisión/Random Forest):} Estos algoritmos son generalmente robustos a la multicolinealidad, ya que seleccionan el mejor divisor en cada nodo sin requerir independencia entre características.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Caracterización Bivariada y Codificación Target (Fase 2)}
+		La \textbf{caracterización de datos} bivariada busca cuantificar la relación entre atributos y la variable objetivo para extraer conocimiento útil.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Preprocesamiento Funcional:} Se realiza un \textit{Label Encoding} de la variable \texttt{diagnosis} (M=1, B=0) para permitir su inclusión en la matriz de correlación de Pearson.
+			\item<3-> \textbf{Exclusión Estructural:} Se elimina la columna \texttt{id} para evitar el ruido en la visualización, ya que los identificadores carecen de significado estadístico en la abstracción del hecho.
+			\item<4-> \textbf{Objetivo:} Detectar dependencias fuertes ($|r| \approx 1$) que indiquen redundancia o alta capacidad predictiva.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación en Python: Matriz de Correlación (Fase 2)}
+		Utilizando \textit{pandas} y \textit{seaborn}, se genera una representación visual de las interdependencias del dataset tras la reducción inicial de variables:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 1. Codificacion numerica de la variable objetivo
+df_corr = df.copy()
+df_corr["diagnosis_num"] = df_corr["diagnosis"].map({"M": 1, "B": 0})
+
+# 2. Seleccion de variables numericas y exclusion de ID
+df_num = df_corr.select_dtypes(include=['float64', 'int64']).drop(columns=["id"])
+
+# 3. Generacion del Mapa de Calor
+plt.figure(figsize=(24,20))
+sns.heatmap(df_num.corr(), cmap='coolwarm', annot=True)
+plt.title('Mapa de calor incluyendo diagnosis_num')
+		\end{lstlisting}
+		\onslide<3->\textbf{Nota:} La paleta \textit{coolwarm} facilita la distinción entre correlaciones positivas (cálidas) y negativas (frías).
+	\end{frame}
+	
+	\begin{frame}{Identificación de Predictores de Malignidad (Fase 2)}
+		El mapa de calor revela qué características morfológicas poseen mayor capacidad de \textbf{discriminación de datos}.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Predictores Fuertes:} Atributos como \texttt{concave points\_worst}, \texttt{perimeter\_worst} y \texttt{concavity\_mean} presentan una fuerte correlación positiva con \texttt{diagnosis\_num}.
+			\item<3-> \textbf{Significado Clínico:} Los valores elevados en estas métricas de irregularidad del contorno están asociados directamente con diagnósticos malignos.
+			\item<4-> \textbf{Predictores Débiles:} Variables como \texttt{texture\_mean} o \texttt{smoothness\_mean} muestran colores tenues, indicando una menor influencia individual en el target.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Caracterización Bivariada: Matriz de Correlación (Fase 2)}
+		\begin{columns}[c]
+			\onslide<2->\begin{column}{0.7\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/mapa de calor.png}
+			\end{column}
+			
+			\begin{column}{0.35\textwidth}
+				\onslide<3->\textbf{Hallazgos Clave:}
+				\begin{itemize}
+					\item<3-> \scriptsize{\textbf{Predictores Fuertes:} Atributos como \textit{concave points\_worst} y \textit{perimeter\_worst} muestran una alta correlación positiva con la malignidad.}
+					\item<4-> \scriptsize{\textbf{Multicolinealidad:} Persisten bloques de alta correlación ($r \approx 1$) en medidas geométricas, lo que sugiere redundancia informativa.}
+					\item<5-> \scriptsize{\textbf{Implicación:} La robustez de algoritmos simbólicos ante esta redundancia justifica su selección para el modelado .}
+				\end{itemize}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Detección de Dependencias entre Predictores (Fase 2)}
+		La \textbf{caracterización bivariada} busca identificar relaciones de interdependencia entre variables independientes para evaluar la calidad funcional del dataset.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Problema de Multicolinealidad:} Una correlación cercana a la unidad ($|r| > 0.8$) indica redundancia informativa sustancial.
+			\item<3-> \textbf{Riesgo en Modelado:} La alta correlación dificulta la atribución de importancia a los atributos y vuelve inestables a modelos paramétricos como la Regresión Logística.
+			\item<4-> \textbf{Optimización Computacional:} Detectar estos pares permite una reducción de dimensionalidad por selección en la siguiente fase, incrementando la información contenida en cada variable restante.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación en Python: Filtrado de Pares Críticos (Fase 2)}
+		Se implementa un algoritmo para extraer el triángulo superior de la matriz de correlación, evitando redundancias en el reporte de calidad.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 1. Seleccion de predictores y calculo de correlacion absoluta
+predictive_cols = df_num.columns.drop('diagnosis_num', errors='ignore')
+correlation_matrix = df_num[predictive_cols].corr().abs()
+
+# 2. Seleccion del triangulo superior (evita duplicados simetricos)
+upper_tri = correlation_matrix.where(np.triu(np.ones(correlation_matrix.shape), k=1).astype(bool))
+
+# 3. Identificacion de pares con r > 0.8
+highly_correlated_pairs = []
+for col in upper_tri.columns:
+for row in upper_tri.index:
+if row < col and upper_tri.loc[row, col] > 0.8:
+highly_correlated_pairs.append((row, col, upper_tri.loc[row, col]))
+		\end{lstlisting}
+	\end{frame}
+	
+	\begin{frame}{Reporte de Pares Altamente Correlacionados ($|r| > 0.8$) (Fase 2)}
+		Se identifican dependencias críticas que confirman la redundancia geométrica y estructural del dataset:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Redundancia Media-Extremo:} \textit{perimeter\_mean} y \textit{perimeter\_worst} presentan la correlación más alta (\textbf{0.97}), sugiriendo que ambas variables describen el mismo hecho físico.
+			\item<3-> \textbf{Consistencia Morfológica:} Pares como \textit{compactness\_mean} y \textit{concavity\_mean} (0.88) reflejan la relación biológica entre la forma y la irregularidad del núcleo celular.
+			\item<4-> \textbf{Variables de Error:} \textit{compactness\_se} y \textit{fractal\_dimension\_se} (0.80) indican que la variabilidad en la forma está ligada a la complejidad del borde.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{¿Qué es un Pair Plot (Gráfico de Pares)? (Fase 2)}
+		El análisis exploratorio (EDA) busca comprender las estructuras y dinámicas del dataset mediante la interacción visual. Un \textit{Pair Plot} genera una cuadrícula $N \times N$ de subgráficos para $N$ variables numéricas:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Eje Diagonal:} Muestra la distribución univariante de cada atributo mediante histogramas o estimaciones de densidad de kernel (KDE).
+			\item<3-> \textbf{Ejes Fuera de la Diagonal:} Presenta gráficos de dispersión (\textit{scatter plots}) para cada combinación bivariada, permitiendo visualizar la relación entre dos variables distintas.
+		\end{itemize}
+		\onslide<4->\textbf{Objetivo:} Traducir preguntas del dominio de datos en consultas visuales interpretables como propiedades estadísticas.
+	\end{frame}
+	
+	\begin{frame}{Interpretación de Patrones Visuales (Fase 2)}
+		La morfología de los puntos en los \textit{scatter plots} indica la naturaleza de la relación entre los atributos físicos:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Relación Positiva/Negativa:} La tendencia ascendente o descendente de los puntos revela la dirección de la correlación.
+			\item<3-> \textbf{Fuerza de Asociación:} Puntos que forman líneas o curvas definidas indican correlaciones fuertes, facilitando la detección de \textbf{multicolinealidad}.
+			\item<4-> \textbf{Agrupaciones (Clusters):} La formación de grupos naturales sugiere la existencia de subgrupos o la influencia de la variable objetivo (\textit{diagnosis}).
+			\item<5-> \textbf{Ausencia de Correlación:} Puntos dispersos sin patrón claro indican independencia estadística, lo cual es valioso para la selección de variables independientes.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Implicaciones en la Preparación de Datos (Fase 2)}
+		Esta visualización es un artefacto crítico para la toma de decisiones técnicas en la Fase 3 de CRISP-DM:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Selección de Atributos:} Permite identificar visualmente variables redundantes (con alta colinealidad) que pueden ser eliminadas para optimizar recursos computacionales.
+			\item<3-> \textbf{Detección de Outliers:} Facilita la identificación de puntos que se desvían del patrón general, permitiendo decidir si son "datos sucios'' o hechos clínicos relevantes.
+			\item<4-> \textbf{Validación de Asunciones:} Ayuda a determinar si las relaciones son lineales o no, guiando la selección de algoritmos (ej. Regresión Lineal vs. Modelos Simbólicos).
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Selección Informada de Características (Fase 2)}
+		La \textbf{caracterización de datos} bivariada respecto a la variable objetivo permite cuantificar la influencia de cada atributo en el diagnóstico.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Preprocesamiento Funcional:} Se aplica \textit{Label Encoding} a la columna \texttt{diagnosis} (M=1, B=0) para calcular coeficientes de correlación de Pearson.
+			\item<3-> \textbf{Identificación de Relevancia:} Atributos con alta correlación ($r > 0.8$) como \texttt{concave points\_worst} y \texttt{perimeter\_worst} son indicadores críticos de malignidad.
+			\item<4-> \textbf{Filtrado de Ruido:} Variables con correlación cercana a cero (ej. \texttt{id}, \texttt{texture\_se}) se identifican como no informativas para el modelo final.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación en Python: Ranking de Influencia (Fase 2)}
+		Se calcula la matriz de correlación y se extrae la magnitud absoluta de la relación con el \textit{target} para priorizar las variables:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# 1. Codificacion numerica y seleccion de variables continuas
+df_corr = df.copy()
+df_corr["diagnosis_num"] = df_corr["diagnosis"].map({"M": 1, "B": 0})
+numeric_df = df_corr.select_dtypes(include=['float64', 'int64'])
+
+# 2. Calculo de correlacion con la variable objetivo
+corr_target = numeric_df.corr()["diagnosis_num"].abs().sort_values(ascending=False)
+print(corr_target)
+
+# Resultado: concave points_worst (0.7935) lidera la capacidad discriminatoria
+		\end{lstlisting}
+		\textbf{Nota técnica:} Un valor de 0.79 indica una asociación lineal fuerte.
+	\end{frame}
+	
+	\begin{frame}{Visualización de Sinergias mediante Pair Plots (Fase 2)}
+		El \textit{Pair Plot} permite una interacción visual con el dataset para comprender sus estructuras y dinámicas multivariadas.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Diagonal (Univariante):} Los histogramas o KDE revelan la separación de las densidades entre Benigno y Maligno.
+			\item<3-> \textbf{Fuera de la Diagonal (Bivariante):} Los gráficos de dispersión exponen la dirección de la relación y la formación de grupos naturales o \textit{clusters}.
+			\item<4-> \textbf{Detección de Multicolinealidad:} La presencia de puntos alineados en formas lineales estrechas confirma la redundancia geométrica identificada previamente.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación de la Cuadrícula Multivariada (Fase 2)}
+		Se genera la visualización utilizando los mejores predictores identificados, facilitando la detección visual de patrones y \textit{outliers}:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Seleccion de las variables top por su r con diagnosis_num
+top_vars = corr_target.index[1:6] # Excluyendo el propio diagnosis_num
+
+# Generacion del Pair Plot discriminatorio
+sns.pairplot(df[top_vars.tolist() + ["diagnosis"]], 
+hue="diagnosis", 
+palette="viridis", 
+diag_kind="kde")
+plt.show()
+		\end{lstlisting}
+		\onslide<3->\textbf{Interpretación:} La clara separación de colores en los ejes indica que el espacio de características seleccionado es ideal para algoritmos simbólicos como \textit{Random Forest}.
+	\end{frame}
+	
+	\begin{frame}{Análisis Multivariado: Pair Plots por Diagnóstico (Fase 2)}
+				
+		\begin{columns}[c]
+			\onslide<2->\begin{column}{0.65\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Pair Plot.png}
+			\end{column}
+			
+			\onslide<3->\begin{column}{0.4\textwidth}
+				\textbf{Interpretación Técnica:}
+				\begin{itemize}
+					\item<3-> \scriptsize{\textbf{Diagonal:} Muestra la distribución univariante (KDE) de cada variable, evidenciando la separación de densidades entre clases.}
+					\item<4-> \scriptsize{\textbf{Fuera de Diagonal:} Los \textit{scatter plots} revelan la fuerza de asociación y la formación de \textit{clusters} naturales.}
+					\item<5-> \scriptsize{\textbf{Multicolinealidad:} La alineación estrecha de puntos confirma redundancia geométrica crítica para el modelado.}
+				\end{itemize}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Justificación Técnica del Plan Experimental (Fase 2)}
+		El objetivo es cuantificar cómo la redundancia de atributos afecta a los modelos basados en el cálculo de distancias en un espacio euclídeo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Modelo 1 (Base):} Utiliza el conjunto inicial de 24 predictores. La alta dimensionalidad puede diluir la influencia de variables críticas.
+			\item<3-> \textbf{Modelo 2 (Optimizado):} Utiliza un conjunto reducido eliminando pares con $r > 0.8$. Esto busca mitigar la \textit{multicolinealidad} que vuelve inestables a ciertos clasificadores.
+			\item<4-> \textbf{Algoritmo Seleccionado:} KNN, un clasificador estadístico que asume que las instancias cercanas en el espacio de características pertenecen a la misma clase.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Estandarización y Codificación del Target (Fase 2)}
+		Como paso previo al modelado, el preprocesamiento funcional garantiza la usabilidad y fiabilidad de los datos.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Label Encoding:} La conversión de \textit{diagnosis} a binario (M=1, B=0) es obligatoria para el procesamiento matemático del vector objetivo $y$.
+			\item<3-> \textbf{Standardization ($Z$-score):} KNN es extremadamente sensible a la escala de los atributos. Sin el uso de \texttt{StandardScaler}, variables con rangos amplios (como \textit{area\_worst}) dominarían el cálculo de la distancia sobre métricas decimales (como \textit{smoothness\_mean}), sesgando el aprendizaje.
+			\item<4-> \textbf{Exclusión Estructural:} Se eliminan \texttt{id} y \texttt{diagnosis} para evitar ruido estructural y fuga de datos (\textit{data leakage}).
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación de la Preparación de Datos (Fase 2)}
+		\onslide<2->\begin{lstlisting}[style=colab]
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# 1. Codificacion de la variable objetivo (Maligno=1, Benigno=0)
+df['diagnosis_num'] = df['diagnosis'].map({'M': 1, 'B': 0})
+
+# 2. Definicion de la matriz de caracteristicas X (excluyendo IDs y Target)
+exclude_cols = ['id', 'diagnosis', 'diagnosis_num']
+X_initial = df.select_dtypes(include=['float64', 'int64']).drop(columns=exclude_cols, errors='ignore')
+
+# 3. Definicion del vector objetivo y
+y = df['diagnosis_num']
+
+# 4. Estandarizacion funcional para escalas comparables
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_initial)
+
+# 5. Reconstruccion del DataFrame para mantener interpretabilidad
+X_initial = pd.DataFrame(X_scaled, columns=X_initial.columns)
+
+display(X_initial.head())
+		\end{lstlisting}
+		\onslide<2->\textbf{Resultado:} Se obtiene una matriz $X$ donde cada variable tiene Media 0 y Desviación Estándar 1, ideal para algoritmos de vecinos más cercanos.
+	\end{frame}
+	
+	
+	\begin{frame}{Estrategia de Selección de Atributos (Fase 2)}
+		La reducción de dimensionalidad por selección busca incrementar la información contenida en cada variable y mitigar la inestabilidad causada por la multicolinealidad.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Criterio de Exclusión:} Se analizan los pares con $|r| > 0.8$ detectados en la auditoría de correlación.
+			\item<3-> \textbf{Heurística de Selección:} Entre dos variables altamente correlacionadas, se preserva aquella que posee un coeficiente de correlación más alto respecto a la variable objetivo (\texttt{diagnosis\_num}).
+			\item<4-> \textbf{Justificación para KNN:} Al operar en un espacio euclídeo, la presencia de variables redundantes diluye la influencia de los predictores críticos y aumenta los recursos computacionales necesarios.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación Técnica: Generación de $X_{reduced}$ (Fase 2)}
+		Se itera sobre los pares críticos para descartar atributos menos informativos, resultando en un conjunto de características optimizado:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+columns_to_drop_for_reduced = set()
+
+# Seleccion supervisada basada en la correlacion con el target
+for feature1, feature2, correlation_value in highly_correlated_pairs:
+	if corr_target[feature1] < corr_target[feature2]:
+		columns_to_drop_for_reduced.add(feature1)
+	else:
+		columns_to_drop_for_reduced.add(feature2)
+
+# Creacion del conjunto reducido
+X_reduced = X_initial.drop(columns=list(columns_to_drop_for_reduced))
+		\end{lstlisting}
+		\onslide<2->\textbf{Resultado:} Se reduce la "deuda técnica estructural" al eliminar características que no aportan conocimiento incremental al fenómeno de la malignidad.
+	\end{frame}
+	
+	\begin{frame}{Diseño de Pruebas: Muestreo Estratificado (Fase 2)}
+		La partición de los datos en conjuntos de entrenamiento y prueba es vital para estimar la precisión real del modelo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Muestreo Estratificado:} Dado el ligero desbalance de clases (63\% B, 37\% M), se garantiza que la proporción de diagnósticos se mantenga idéntica tanto en el entrenamiento como en el test.
+			\item<3-> \textbf{División 80/20:} Se reserva el 20\% de los datos (114 instancias) para la evaluación final, lo que permite una estimación fiable del error de generalización.
+			\item<4-> \textbf{Consistencia Experimental:} Se utiliza una semilla aleatoria (\textit{random\_state}) para asegurar la reproducibilidad de los resultados en futuras iteraciones.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Verificación de la Estructura de Entrenamiento (Fase 2)}
+		Tras la ejecución del plan, contamos con dos experimentos controlados para evaluar el impacto de la reducción de dimensiones:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# Particion estratificada para ambos conjuntos
+X_initial_train, X_initial_test, y_train, y_test = train_test_split(
+X_initial, y, test_size=0.2, random_state=42, stratify=y
+)
+
+X_reduced_train, X_reduced_test, _, _ = train_test_split(
+X_reduced, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Dimensiones finales:
+# X_initial_train: (455, 30) | X_reduced_train: (455, 14*)
+		\end{lstlisting}
+		\onslide<2->\textit{*Nota: El número exacto de columnas reducidas dependerá de la cantidad de pares unívocos identificados en la fase de auditoría.}
+	\end{frame}
+	
+	
+	
+	\begin{frame}{Entrenamiento de Modelos Basados en Distancia (Fase 2)}
+		El algoritmo \textit{K-Nearest Neighbors} (KNN) es un clasificador estadístico que estima la probabilidad de pertenencia a una clase basándose en la proximidad en el espacio euclídeo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Diseño de Pruebas:} Se evalúan dos configuraciones para medir el impacto de la multicolinealidad.
+			\item<3-> \textbf{Escenario A (Initial):} Uso de 24 predictores estandarizados. Riesgo de "dilución" de la influencia de variables críticas.
+			\item<4-> \textbf{Escenario B (Reduced):} Uso de un conjunto optimizado tras eliminar variables con $|r| > 0.8$. Busca mejorar la compatibilidad funcional.
+			\item<5-> \textbf{Hiperparámetro:} Se establece $k=5$ como valor predeterminado para el balance entre sesgo y varianza.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Implementación del Ciclo de Modelado (Fase 2)}
+		Se utiliza la librería \texttt{scikit-learn} para el entrenamiento y la obtención de métricas de desempeño técnico:
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Entrenamiento del modelo optimizado (Reduced Features)
+knn_reduced = KNeighborsClassifier(n_neighbors=5)
+knn_reduced.fit(X_reduced_train, y_train)
+
+# Prediccion y generacion de metricas
+y_pred_reduced = knn_reduced.predict(X_reduced_test)
+print(classification_report(y_test, y_pred_reduced))
+		\end{lstlisting}
+		\onslide<2->\textbf{Nota técnica:} El entrenamiento en KNN consiste primordialmente en el almacenamiento de las instancias, siendo la fase de test la más costosa computacionalmente.
+	\end{frame}
+	
+	\begin{frame}{Instrumentos de Evaluación de Clasificación (Fase 2)}
+		La evaluación técnica se apoya en tres artefactos fundamentales para determinar la fiabilidad del diagnóstico:
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Matriz de Confusión ($C_{ij}$):} Identifica el número de aciertos y errores. En oncología, los Falsos Negativos (clase Maligna predicha como Benigna) poseen un costo de descalificación crítico.
+			\item<3-> \textbf{Precisión y Recall:} El \textit{Recall} es vital para asegurar la captura de la mayoría de los casos positivos (cáncer).
+			\item<4-> \textbf{F1-Score:} Media armónica que garantiza un equilibrio en el desempeño ante el ligero desbalance de clases observado (63\% B, 37\% M).
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Impacto de la Reducción de Dimensionalidad (Fase 2)}
+		Comparar el modelo \textit{Initial} vs \textit{Reduced} permite validar asunciones sobre la calidad funcional del dataset:
+		
+		\begin{itemize}
+			\item<2-> \textbf{Estabilidad del Modelo:} La eliminación de variables redundantes reduce la inestabilidad en la atribución de importancia.
+			\item<3-> \textbf{Eficiencia:} Un menor número de dimensiones disminuye los recursos computacionales y acelera la iteración.
+			\item<4-> \textbf{Resultados Esperados:} Si la precisión se mantiene o mejora, se confirma que la estrategia de preprocesamiento eliminó ruido sin sacrificar conocimiento útil.
+		\end{itemize}
+		\onslide<5->\textbf{Conclusión:} El modelo reducido representa un artefacto de mayor valor para el despliegue debido a su menor "deuda técnica''.
+	\end{frame}
+	
+	\begin{frame}{Comparativa de Desempeño: Initial vs. Reduced (Fase 2)}
+		\scriptsize
+		
+		La evaluación técnica revela una ligera degradación del rendimiento al eliminar la multicolinealidad.
+		
+		\onslide<2->\begin{table}
+			\tiny
+			\centering
+			\begin{tabular}{lccccc}
+				\toprule
+				\textbf{Modelo} & \textbf{Acc} & \textbf{Clase} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\ 
+				\midrule
+				\textbf{Initial (24 var.)} & 0.9386 & Benigno (0) & 0.92 & 0.99 & 0.95 \\
+				&  & Maligno (1) & 0.97 & 0.86 & 0.91 \\ 
+				\midrule
+				\textbf{Reduced (14 var.)} & 0.9211 & Benigno (0) & 0.91 & 0.97 & 0.94 \\
+				&  & Maligno (1) & 0.95 & 0.83 & 0.89 \\ 
+				\bottomrule
+			\end{tabular}
+		\end{table}
+		
+		\begin{itemize}
+			\item<3-> \textbf{Observación:} El modelo inicial supera al reducido por un margen del 1.75\%.
+			\item<4-> \textbf{Costo de Error:} La reducción aumentó los Falsos Negativos (M→B) de 6 a 7 casos.
+		\end{itemize}
+		
+	\end{frame}
+	
+	\begin{frame}{Efecto de la Reducción en Algoritmos de Distancia (Fase 2)}
+		
+		El comportamiento de KNN presenta dinámicas distintas frente a la redundancia de atributos.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Pérdida de Información Sutil:} Variables con alta correlación lineal ($|r| > 0.8$) podrían contener relaciones no lineales útiles para KNN.
+			
+			\item<3-> \textbf{Sensibilidad a la Dimensión:} En KNN, eliminar variables puede diluir la capacidad del algoritmo para discernir casos borde.
+			
+			\item<4-> \textbf{Estabilidad vs. Rendimiento:} La reducción beneficia a Regresión Logística, pero en KNN causa pérdida marginal de resolución.
+		\end{itemize}
+		
+	\end{frame}
+	
+	\begin{frame}{Conclusión Final: Selección del Modelo de Despliegue (Fase 2)}
+		
+		La decisión depende del balance entre eficiencia computacional e impacto clínico.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Superioridad Técnica:} Para máxima detección de malignidad, el modelo con \textbf{X\_initial} es óptimo por su mayor sensibilidad.
+			
+			\item<3-> \textbf{Eficiencia Estructural:} El modelo \textbf{X\_reduced} posee menor "deuda técnica estructural", siendo más fácil de mantener.
+			
+			\item<4-> \textbf{Recomendación:} El rendimiento marginal ganado (1.75\%) justifica mantener el conjunto completo de características.
+		\end{enumerate}
+		
+	\end{frame}
+	
+	\section{Fase3. Modelado}
+	\begin{frame}[fragile]{Fase 3: Selección y Limpieza Estructural}
+		La \textbf{selección de datos} busca construir el conjunto final de atributos eliminando redundancias informativas que puedan causar inestabilidad en el modelado.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+import pandas as pd
+# Carga inicial y depuracion estructural
+df = pd.read_csv('Cancer_Data.csv')
+
+# Eliminacion de identificadores y ruido (Unnamed: 32)
+# Eliminacion de variables con alta colinealidad geometrica (Radius y Area)
+df = df.drop(columns=['id', 'Unnamed: 32', 'radius_se', 'area_se', 
+'radius_worst', 'area_worst', 'radius_mean', 
+'area_mean'], errors='ignore')
+		\end{lstlisting}
+		
+		\textbf{Justificación Técnica:} Se descartan las métricas de \textit{radio} y \textit{área} debido a su alta correlación lineal con el \textit{perímetro}. Mantener variables redundantes dificulta la atribución de comportamiento y aumenta la "deuda técnica" del sistema.
+	\end{frame}
+	
+	\begin{frame}{Fase 3: Selección de Técnicas de Modelado}
+		Se seleccionan tres paradigmas distintos para evaluar la robustez del diagnóstico ante diferentes estructuras de datos:
+		
+		\begin{itemize}
+			\item<2-> \textbf{K-Nearest Neighbors (KNN):} Clasificador estadístico basado en distancias euclídeas. Es ideal cuando los atributos están igualmente escalados.
+			\item<3-> \textbf{Árboles de Decisión (Decision Trees):} Algoritmo simbólico no paramétrico. Es robusto ante distribuciones con alto sesgo o \textit{kurtosis} y no asume normalidad.
+			\item<4-> \textbf{Deep Learning (Redes Neuronales):} Modelos de múltiples capas (\textit{MLP}) capaces de aproximar fronteras de decisión no lineales complejas a partir de los atributos físicos celulares.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Requerimientos Funcionales para Modelos Seleccionados (Fase 3)}
+		Antes del entrenamiento, los datos deben cumplir con condiciones específicas de usabilidad y fiabilidad.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Estandarización ($Z$-score):} Obligatoria para KNN y Deep Learning. Sin ella, variables con rangos mayores dominarían el cálculo de la distancia y el ajuste de pesos neuronales.
+			\item<3-> \textbf{Partición de Datos:} Se implementará un diseño de pruebas con división entrenamiento/prueba (80/20) o validación cruzada (\textit{cross-validation}) para obtener estimaciones de precisión no sesgadas.
+			\item<4-> \textbf{Codificación del Target:} Transformación de \textit{diagnosis} a valores numéricos $\{0, 1\}$ para compatibilidad matemática.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Preparación de Datos (Fase 3)}
+		Antes del modelado, se aplicó un preprocesamiento funcional para garantizar la fiabilidad del análisis,.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Estandarización ($Z$-score):} KNN es sensible a la escala; sin \texttt{StandardScaler}, variables con magnitudes mayores dominarían el cálculo de la distancia euclídea,.
+			\item<3-> \textbf{Muestreo Estratificado:} Dado el desbalance de la variable \textit{diagnosis} (357 B, 212 M), se aplicó \texttt{stratify=y} para preservar las proporciones originales en los conjuntos de \textit{train} y \textit{test},.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Estrategia de Modelado y Ajuste de Hiperparámetros (Fase 3)}
+		Se implementó un diseño de pruebas robusto utilizando búsqueda en rejilla (\textit{GridSearchCV}) para maximizar el F1-Score,.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+# Optimización de KNN
+knn_params = {
+	'n_neighbors': [1-6],
+	'weights': ['uniform', 'distance'],
+	'metric': ['euclidean', 'manhattan']
+}
+knn_grid = GridSearchCV(knn, knn_params, cv=5, scoring='f1')
+
+# Optimización de Árbol de Decisión
+dt_params = {
+	'max_depth': [None, 5, 10, 15, 20],
+	'criterion': ['gini', 'entropy']
+}
+dt_grid = GridSearchCV(dt, dt_params, cv=5, scoring='f1')
+		\end{lstlisting}
+		\textbf{Justificación:} La validación cruzada ($k=5$) asegura que la selección de hiperparámetros no dependa de una partición aleatoria específica,.
+	\end{frame}
+	
+	\begin{frame}{K-Nearest Neighbors: Sensibilidad y Distancia (Fase 3)}
+		KNN es un clasificador estadístico que asume que las observaciones cercanas en el espacio n-dimensional pertenecen a la misma clase,.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Métrica de Distancia:} La inclusión de las métricas \textit{Euclidean} ($h=2$) y \textit{Manhattan} ($h=1$) permite evaluar la topología del espacio de características físicas celulares,.
+			\item<3-> \textbf{Ponderación (\textit{Weights}):} La opción \textit{distance} otorga mayor influencia a los vecinos más próximos, lo que suele mejorar la precisión ante límites de decisión complejos.
+			\item<4-> \textbf{Comportamiento:} Si bien KNN es potente, la fase de test es costosa computacionalmente, lo que justifica el interés en reducir la dimensionalidad previamente,.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Árboles de Decisión: Robustez e Interpretabilidad (Fase 3)}
+		Los árboles de decisión son algoritmos simbólicos no paramétricos que no asumen normalidad en los datos,.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Distribuciones Extremas:} La teoría indica que estos modelos favorecen datasets con alto sesgo (\textit{skewness}) y \textit{kurtosis}, comunes en datos médicos,.
+			\item<3-> \textbf{Prevención de Sobreajuste:} El parámetro \texttt{max\_depth} es crítico para controlar la complejidad del árbol. Un árbol excesivamente profundo captura el ruido del entrenamiento, perdiendo capacidad de generalización en el test,.
+			\item<4-> \textbf{Criterios de Pureza:} Se evalúan Gini y Entropía para optimizar la discriminación de datos en cada nodo,.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Preparación Funcional y Mitigación de Colinealidad (Fase 3)}
+		Antes de alimentar la red neuronal, los datos deben cumplir con requerimientos funcionales estrictos para garantizar la fiabilidad del modelo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Gestión de Atributos Correlacionados:} Se eliminaron las variables de radio y área (\texttt{radius\_*}, \texttt{area\_*}) por su redundancia geométrica con el perímetro. Esto reduce la ``deuda técnica estructural'' y evita la fragilidad del modelo ante cambios en la distribución.
+			\item<3-> \textbf{Estandarización Obligatoria:} Las redes neuronales (\textit{MLP}) requieren que los atributos estén en escalas comparables para un ajuste de pesos eficiente. Se aplicó \textit{Z-score normalization} ($\mu=0, \sigma=1$) mediante \texttt{StandardScaler}.
+			\item<4-> \textbf{Muestreo Estratificado:} Se utilizó \texttt{stratify=y} para preservar la proporción de diagnósticos benignos y malignos en los conjuntos de entrenamiento y prueba.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[fragile]{Estrategia de Modelado: Perceptrón Multicapa (MLP) (Fase 3)}
+		Se implementó un diseño de pruebas mediante búsqueda en rejilla (\textit{GridSearchCV}) para optimizar la arquitectura y generalización.
+		
+		\onslide<2->\begin{lstlisting}[style=colab]
+	# Parámetros de la Red Neuronal Profunda
+	mlp_params = {
+		'hidden_layer_sizes': [(100, 50), (100, 50, 25), (64, 32, 16)],
+		'activation': ['relu', 'tanh'], 
+		'alpha': [0.0001, 0.01, 0.1] # Penalización L2 para evitar overfitting
+	}
+	mlp_grid = GridSearchCV(mlp, mlp_params, cv=5, scoring='f1')
+		\end{lstlisting}
+		
+		\onslide<3->\textbf{Justificación Técnica:}
+		\begin{itemize}
+			\item<3-> \textbf{Profundidad:} Las múltiples capas ocultas permiten aproximar fronteras de decisión no lineales complejas a partir de la morfología celular.
+			\item<4-> \textbf{Regularización (Alpha):} El uso de penalización $L_2$ mitiga el riesgo de que la red memorice el ruido del entrenamiento, promoviendo pesos más pequeños y un modelo más robusto.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{K-Nearest Neighbors (KNN): Análisis de Distancia (Fase 3)}
+		El algoritmo KNN se configuró con una métrica \textit{Euclidean} y $k=11$ vecinos, resultando en un desempeño sólido pero sensible a la topología del espacio de características.
+		
+		\begin{columns}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Métricas Clave:}
+				\begin{itemize}
+					\item<2-> \textbf{F1 TRAIN:} 0.9509.
+					\item<3-> \textbf{F1 TEST:} 0.9136.
+					\item<4-> \textbf{Parámetros:} Distancia Euclídea, pesos uniformes.
+				\end{itemize}
+				\onslide<5->\scriptsize{La brecha entre train/test indica una generalización aceptable, aunque la reducción previa de variables pudo afectar marginalmente su resolución.}
+			\end{column}
+			\onslide<6->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Curva Roc K-Nearest Neighbors (KNN).png}
+				\captionof{figure}{\tiny{AUC Test = 0.981.}}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Árbol de Decisión: Robustez Simbólica (Fase 3)}
+		Los árboles de decisión demostraron una alta capacidad de discriminación, beneficiándose de distribuciones extremas comunes en datos clínicos.
+		
+		\begin{columns}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Métricas Clave:}
+				\begin{itemize}
+					\item<2-> \textbf{F1 TRAIN:} 0.9884.
+					\item<3-> \textbf{F1 TEST:} 0.9512.
+					\item<4-> \textbf{Pureza:} Criterio de Entropía con profundidad máxima de 5.
+				\end{itemize}
+				\onslide<5->\scriptsize{La AUC de 0.957 en test confirma que los algoritmos simbólicos son altamente efectivos para capturar reglas de decisión legibles en este dominio.}
+			\end{column}
+			\onslide<6->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Curva Roc Árbol de Decisión.png}
+				\captionof{figure}{\tiny{AUC Test = 0.957.}}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Deep Learning (MLP): Mapeo No Lineal Complejo (Fase 3)}
+		El Perceptrón Multicapa (MLP) alcanzó el desempeño máximo, logrando una frontera de decisión óptima mediante una arquitectura de (100, 50) neuronas.
+		
+		\begin{columns}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Métricas Clave:}
+				\begin{itemize}
+					\item<2-> \textbf{F1 TRAIN:} 1.0000.
+					\item<3-> \textbf{F1 TEST:} 0.9630.
+					\item<4-> \textbf{Función:} Activación \textit{tanh} con regularización $\alpha=0.0001$.
+				\end{itemize}
+				\onslide<5->\scriptsize{El ajuste perfecto en entrenamiento y la AUC de 0.991 en test posicionan a este modelo como el artefacto más fiable para el diagnóstico asistido.}
+			\end{column}
+			\onslide<6->\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Curva ROC - Red Neuronal Profunda.png}
+				\captionof{figure}{\tiny{AUC Test = 0.991.}}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+		\begin{frame}{Comparativa Final y Conclusión (Fase 3)}
+		Siguiendo el principio de ``horses for courses'', la selección del modelo final depende del balance entre explicabilidad y precisión técnica.
+		
+		\begin{table}[]
+			\tiny
+			\centering
+			\onslide<2->\begin{tabular}{@{}lccc@{}}
+				\toprule
+				\textbf{Modelo} & \textbf{F1-Score (Test)} & \textbf{AUC (Test)} & \textbf{Costo de Deuda Técnica} \\ \midrule
+				KNN & 0.9136 & 0.981 & Moderado (sensible a escala) \\
+				Árbol de Decisión & 0.9512 & 0.957 & Bajo (interpretable) \\
+				\textbf{Red Neuronal} & \textbf{0.9630} & \textbf{0.991} & Alto (caja negra)  \\ \bottomrule
+			\end{tabular}
+		\end{table}
+		
+		\onslide<3->\textbf{Conclusión de la Fase 3:}
+		\begin{itemize}
+			\item<3-> La \textbf{Red Neuronal} es el modelo óptimo para maximizar el éxito del diagnóstico clínico.
+			\item<4-> El \textbf{Árbol de Decisión} ofrece una alternativa competitiva con mayor transparencia en las reglas de diagnóstico médico.
+		\end{itemize}
+	\end{frame}
+	
+	\section{Fase 4. Evaluación}
+	\begin{frame}{Fase 4: Evaluación}
+		\begin{itemize}
+			\item \textbf{Evaluación:} Uso de \textit{Cross-Validation} para garantizar la fiabilidad de las métricas obtenidas. Análisis de la matriz de confusión para minimizar falsos negativos (casos de cáncer no detectados).
+			\item<2-> \textbf{Despliegue:} Planificar la integración del modelo mediante una API o reporte final para su uso en entornos productivos.
+			\item<3-> \textbf{Deuda Técnica:} Considerar factores de riesgo como la dependencia de datos inestables y la necesidad de monitoreo constante de la precisión.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Instrumentos de Evaluación: La Matriz de Confusión (Fase 4)}
+		La evaluación técnica de los modelos predictivos se apoya en la matriz de confusión $C_{ij}$, donde las filas representan las clases reales y las columnas las predicciones del algoritmo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Precisión vs. Costo:} En el dominio médico, no todos los errores tienen el mismo peso. Es más costoso clasificar un caso maligno como benigno (Falso Negativo) que lo contrario.
+			\item<3-> \textbf{Criterio de Evaluación:} Un elemento $C_{ij}$ indica cuántos miembros de la clase $i$ fueron asignados a la clase $j$.
+			\item<4-> \textbf{Implementación:} Se utiliza \texttt{ConfusionMatrixDisplay} para traducir los resultados numéricos en una consulta visual interpretable.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Evaluación de K-Nearest Neighbors (KNN) (Fase 4)}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Matriz de confusion Knn.png}
+			\end{column}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Resultados Técnicos:}
+				\begin{itemize}
+					\item<2-> \textbf{Aciertos B (Benigno):} 70 instancias.
+					\item<3-> \textbf{Falsos Positivos:} 2 casos.
+					\item<4-> \textbf{Falsos Negativos (M $\rightarrow$ B):} 5 casos.
+				\end{itemize}
+				\onslide<5->\scriptsize{KNN muestra una sensibilidad menor en comparación con los modelos simbólicos, lo cual es consistente con la teoría que indica que algoritmos basados en distancias pueden ser afectados por la relevancia dispar de los atributos.}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Evaluación del Árbol de Decisión (Fase 4)}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Matriz de confusion Arbol de decisión.png}
+			\end{column}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Resultados Técnicos:}
+				\begin{itemize}
+					\item<2-> \textbf{Aciertos B:} 71 instancias.
+					\item<3-> \textbf{Falsos Positivos:} 1 caso.
+					\item<4-> \textbf{Falsos Negativos (M $\rightarrow$ B):} 3 casos.
+				\end{itemize}
+				\onslide<5->\scriptsize{La mejora en la clasificación valida que los algoritmos simbólicos suelen ser más robustos ante distribuciones extremas y atributos irrelevantes en conjuntos de datos clínicos.}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Evaluación de la Red Neuronal (MLP) (Fase 4)}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\centering
+				\includegraphics[width=\textwidth]{img/Matriz de confusion MLP.png}
+			\end{column}
+			\onslide<2->\begin{column}{0.5\textwidth}
+				\textbf{Resultados Técnicos:}
+				\begin{itemize}
+					\item<2-> \textbf{Aciertos B:} 72 instancias (\textbf{0 Falsos Positivos}).
+					\item<3-> \textbf{Aciertos M:} 39 instancias.
+					\item<4-> \textbf{Falsos Negativos (M $\rightarrow$ B):} 3 casos.
+				\end{itemize}
+				\onslide<5->\scriptsize{El Perceptrón Multicapa logra el mejor desempeño global, minimizando el riesgo de falsas alarmas mientras mantiene una alta tasa de detección.}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	\begin{frame}{Conclusión de la Fase de Evaluación (Fase 4)}
+		La comparación de las matrices de confusión permite concluir qué artefacto es el más apto para el despliegue clínico.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Minimización del Riesgo:} Tanto el Árbol de Decisión como el MLP redujeron los Falsos Negativos a 3 instancias, lo cual es crítico para la seguridad del paciente.
+			\item<3-> \textbf{Superioridad del MLP:} Al obtener 0 Falsos Positivos, el MLP demuestra una mayor precisión en la discriminación de la clase benigna.
+			\item<4-> \textbf{Siguiente Paso:} Proceder a la Fase 6 (Despliegue) con el modelo MLP, documentando la arquitectura de capas ocultas utilizada para alcanzar estos resultados.
+		\end{enumerate}
+	\end{frame}
+	
+	\section{Fase 5. Despliegue (Teórico)}
+	\begin{frame}{Fase 5. Definición Operativa del Despliegue}
+		El despliegue no es solo la entrega de un resultado, sino la integración del conocimiento descubierto en un entorno de toma de decisiones.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Propósito:} Organizar y presentar los resultados para que el cliente final (stakeholders) pueda utilizarlos de forma recurrente.
+			\item<3-> \textbf{Naturaleza Práctica:} Incluye la creación de APIs, automatización de tareas y reportes dinámicos que reflejen la realidad del negocio.
+			\item<4-> \textbf{Planificación:} Requiere un diseño de implementación que considere el tiempo de respuesta, el almacenamiento y la explicabilidad del modelo.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Infraestructura de Servicio y Deuda Técnica (Fase 5)}
+		En sistemas reales, el código del modelo representa solo un 5\% del sistema; el 95\% restante es infraestructura de soporte.
+		
+		\begin{enumerate}
+			\item<2-> \textbf{Serving Infrastructure:} Capa encargada de recibir peticiones y devolver predicciones en tiempo real o por lotes (batch).
+			\item<3-> \textbf{Modularización:} Es crítico migrar de cuadernos Jupyter (.ipynb) a módulos de Python (.py) para facilitar el mantenimiento y la portabilidad del código.
+			\item<4-> \textbf{Pipelines:} La integración debe evitar las "pipeline jungles" mediante una gestión holística de la colección de datos y extracción de características.
+		\end{enumerate}
+	\end{frame}
+	
+	\begin{frame}{Monitoreo Post-Despliegue (Fase 5)}
+		Una vez en producción, los modelos deben ser auditados constantemente para detectar la degradación del rendimiento por cambios en el mundo externo.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Prediction Bias:} El sistema debe alertar si la distribución de las etiquetas predichas diverge de las observaciones reales.
+			\item<3-> \textbf{Concept Drift:} Los datos de producción pueden cambiar con el tiempo, invalidando los pesos aprendidos durante el entrenamiento inicial.
+			\item<4-> \textbf{Automatización de Alertas:} Es vital implementar mecanismos que retiren o recalibren modelos que dejen de ser aptos para su uso clínico o comercial.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Stack Tecnológico para el Despliegue (Fase 5)}
+		El ecosistema actual ofrece herramientas especializadas para cada subetapa de la puesta en producción.
+		
+		\onslide<2->\begin{table}[]
+			\tiny
+			\centering
+			\begin{tabular}{@{}ll@{}}
+				\toprule
+				\textbf{Función} & \textbf{Herramientas Recomendadas} \\ \midrule
+				\textbf{Interfaz de Usuario} & Gradio, Streamlit, Power BI. \\
+				\textbf{Exposición (API)} & FastAPI, AWS Lambda, Groq. \\
+				\textbf{Inferencia} & Hugging Face Inference Endpoints. \\
+				\textbf{Mantenimiento} & Evidently AI, MLflow, Neptune.ai. \\
+				\textbf{Contenedores} & Docker (para entornos aislados y reproducibles). \\ \bottomrule
+			\end{tabular}
+		\end{table}
+		\onslide<3->\textbf{Nota:} La elección depende del volumen de datos y los requisitos de latencia.
+	\end{frame}
+	
+	\begin{frame}{Criterios de Éxito en el Despliegue (Fase 5)}
+		El despliegue exitoso garantiza que el trabajo sea reproducible y auditable por terceros.
+		
+		\begin{itemize}
+			\item<2-> \textbf{Reproducibilidad:} El uso de \texttt{requirements.txt} y el versionado de datos (DVC) asegura que el experimento pueda repetirse en el futuro.
+			\item<3-> \textbf{Documentación Final:} Un reporte completo debe incluir asunciones, riesgos y una guía de interpretación de los resultados visuales.
+			\item<4-> \textbf{Impacto Ético:} Se debe verificar que el modelo desplegado no perpetúe sesgos detectados en la fase de preparación.
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}[allowframebreaks]{Bibliografía}
+		\scriptsize
+		\begin{thebibliography}{10}
+			
+			\bibitem{Borner2019}
+			K. Börner, et al., “Data visualization literacy,” *PNAS*, 2019.
+			
+			\bibitem{COIICO2024}
+			COIICO, “Manual de gestión y preparación de datos para la IA,” 2024.
+			
+			\bibitem{GonzalezEDA}
+			W. González, “Análisis exploratorio de datos,” *UCV 6213*, 2024.
+			
+			\bibitem{Gonzalez2025}
+			W. González, “Proceso de Minería de Datos,” *Facultad de Ciencias UCV*, 2025.
+			
+			\bibitem{GonzalezPreproc2025}
+			W. González, “Preprocesamiento de Datos,” *Facultad de Ciencias UCV*, 2025.
+			
+			\bibitem{Han2012}
+			J. Han, M. Kamber, and J. Pei, *Data Mining: Concepts and Techniques*, 3rd ed., 2012.
+			
+			\bibitem{IBM2024}
+			IBM, “Conceptos básicos de ayuda de CRISP-DM,” 2024.
+			
+			\bibitem{King1995}
+			R. D. King, et al., “STATLOG: Comparison of Classification Algorithms on Large Real-World Problems,” 1995.
+			
+			\bibitem{Leskovec2014}
+			J. Leskovec, A. Rajaraman, and J. Ullman, *Mining of Massive Datasets*, 2014.
+			
+			\bibitem{Martins2016}
+			S. Martins, et al., “Propuesta de Artefactos para el Subproceso de Gestión de Proyectos de Explotación de Información,” *SEDICI - UNLP*, 2016.
+			
+			\bibitem{Sculley2015}
+			D. Sculley, et al., “Hidden Technical Debt in Machine Learning Systems,” 2015.
+			
+			\bibitem{Taha2024}
+			E. Taha, “Cancer Data (Breast Cancer Wisconsin Diagnostic),” Kaggle, 2024.
+			
+			\bibitem{Tukey1977}
+			J. W. Tukey, *Exploratory Data Analysis*, 1977.
+			
+			\bibitem{Wickham2014}
+			H. Wickham, “Tidy Data,” *Journal of Statistical Software*, 2014.
+			
+			\bibitem{Wirth2000}
+			R. Wirth and J. Hipp, “CRISP-DM: Towards a Standard Process Model for Data Mining,” 2000.
+			
+		\end{thebibliography}
+	\end{frame}
+	
+\end{document}
